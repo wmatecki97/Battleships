@@ -1,6 +1,5 @@
 ﻿using Battleships.Exceptions;
 using Battleships.Interfaces;
-using System.Text.RegularExpressions;
 
 namespace Battleships
 {
@@ -33,24 +32,31 @@ namespace Battleships
                 string input = messager.GetInput();
                 (int x, int y) = inputTranslator.GetCoordinatesFromInput(input);
 
-                string playerName = "player";
+                const string playerName = "player";
 
-                var isHit = logic.CheckField(x, y); //todo struct with more info
-                var message = isHit ? "Hit!" : "Miss";
-                messager.Write(message);
+                CheckField(x, y, playerName);
 
-                var isGameWon = logic.IsGameWon();
-                if (isGameWon)
-                {
-                    messager.Write($"{playerName} won!");
-                    _isRunning = false;
-                }
+                const string computerName = "player";
 
-                //todo computer
+                CheckField(0, 0, computerName);//todo logic for coordinates
             }
             catch (InvalidInputException)
             {
                 messager.Write("Field coordinates should be a character followed by a number e.g. a1");
+            }
+        }
+
+        public void CheckField(int x, int y, string playerName)
+        {
+            var isHit = logic.CheckField(x, y); //todo struct with more info
+            var message = isHit ? "Hit!" : "Miss";
+            messager.Write(message);
+
+            var isGameWon = logic.IsGameWon();
+            if (isGameWon)
+            {
+                messager.Write($"{playerName} won!");
+                _isRunning = false;
             }
         }
     }

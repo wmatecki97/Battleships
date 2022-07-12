@@ -1,3 +1,4 @@
+using Battleships.Exceptions;
 using Battleships.Interfaces;
 using Moq;
 
@@ -5,34 +6,41 @@ namespace Battleships.Tests
 {
     public class UITests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
-        public void CheckField_ValidField_RunsGameLogic()
+        public void ProcessNextRound_ValidField_RunsGameLogicForBothPlayerAndComputer()
         {
-            var logic = new Mock<IGameLogic>();
-            var ui = new UI(logic.Object);
+            var logicMock = new Mock<IGameLogic>();
+            var messegerMock = new Mock<IMessager>();
             const string validField = "A0";
+            messegerMock.Setup(m => m.GetInput()).Returns(validField);
+
+            var inputTranslator = new Mock<IInputTranslator>();
+            inputTranslator.Setup(t => t.GetCoordinatesFromInput(It.IsAny<string>())).Returns((0, 0));
+            
+            var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
             ui.ProcessNextRound();
 
-
-            logic.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+            const int PlayersCount = 2;
+            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(PlayersCount));
         }
 
         [Test]
-        public void CheckField_InvalidField_DontRunGameLogic()
+        public void ProcessNextRound_InvalidField_DontRunGameLogic()
         {
-            var logic = new Mock<IGameLogic>();
-            var ui = new UI(logic.Object);
-            const string validField = "AB";
+            const string input = "A0";
+            var logicMock = new Mock<IGameLogic>();
+            var messegerMock = new Mock<IMessager>();
+            messegerMock.Setup(m => m.GetInput()).Returns(input);
 
-            ui.CheckField(validField);
+            var inputTranslator = new Mock<IInputTranslator>();
+            inputTranslator.Setup(t => t.GetCoordinatesFromInput(It.IsAny<string>())).Throws<InvalidInputException>();
 
-            logic.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
+
+            ui.ProcessNextRound();
+
+            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
         }
     }
 }
