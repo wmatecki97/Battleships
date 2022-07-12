@@ -17,7 +17,8 @@ namespace Battleships.Tests
             var ui = new UI(logic.Object);
             const string validField = "A0";
 
-            ui.CheckField(validField);
+            ui.ProcessNextRound();
+
 
             logic.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
         }
