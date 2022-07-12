@@ -36,7 +36,7 @@ namespace Battleships
 
                 Fire(x, y, playerName);
 
-                const string computerName = "player";
+                const string computerName = "computer";
 
                 Fire(0, 0, computerName);//todo logic for coordinates
             }
