@@ -2,8 +2,7 @@
 
 namespace Battleships.Exceptions
 {
-    [Serializable]
-    internal class InvalidInputException : Exception
+    public class InvalidInputException : Exception
     {
         public InvalidInputException()
         {
