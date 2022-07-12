@@ -17,7 +17,7 @@ namespace Battleships
             this.inputTranslator = inputTranslator;
         }
 
-        public async void Run()
+        public void Run()
         {
             while (_isRunning)
             {
@@ -34,11 +34,11 @@ namespace Battleships
 
                 const string playerName = "player";
 
-                CheckField(x, y, playerName);
+                Fire(x, y, playerName);
 
                 const string computerName = "player";
 
-                CheckField(0, 0, computerName);//todo logic for coordinates
+                Fire(0, 0, computerName);//todo logic for coordinates
             }
             catch (InvalidInputException)
             {
@@ -46,7 +46,7 @@ namespace Battleships
             }
         }
 
-        public void CheckField(int x, int y, string playerName)
+        public void Fire(int x, int y, string playerName)
         {
             var isHit = logic.CheckField(x, y); //todo struct with more info
             var message = isHit ? "Hit!" : "Miss";
