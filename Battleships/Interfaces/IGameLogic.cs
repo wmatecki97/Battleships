@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Interfaces
 {
-    internal interface IGameLogic
+    public interface IGameLogic
     {
         bool CheckField(int x, int y);
     }
