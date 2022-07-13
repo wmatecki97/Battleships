@@ -1,5 +1,6 @@
 using Battleships.Exceptions;
 using Battleships.Interfaces;
+using Battleships.Models;
 using Moq;
 
 namespace Battleships.Tests
@@ -9,7 +10,7 @@ namespace Battleships.Tests
         [Test]
         public void ProcessNextRound_ValidField_RunsGameLogicForBothPlayerAndComputer()
         {
-            var logicMock = new Mock<IGameLogic>();
+            var logicMock = new Mock<IGame>();
             var messegerMock = new Mock<IMessager>();
             const string validField = "A0";
             messegerMock.Setup(m => m.GetInput()).Returns(validField);
@@ -22,14 +23,14 @@ namespace Battleships.Tests
             ui.ProcessNextRound();
 
             const int PlayersCount = 2;
-            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(PlayersCount));
+            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(PlayersCount));
         }
 
         [Test]
         public void ProcessNextRound_InvalidField_DontRunGameLogic()
         {
             const string input = "A0";
-            var logicMock = new Mock<IGameLogic>();
+            var logicMock = new Mock<IGame>();
             var messegerMock = new Mock<IMessager>();
             messegerMock.Setup(m => m.GetInput()).Returns(input);
 
@@ -40,14 +41,14 @@ namespace Battleships.Tests
 
             ui.ProcessNextRound();
 
-            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
         }
 
         [Test]
         public void Fire_Hit_WritesHitMessage()
         {
-            var logicMock = new Mock<IGameLogic>();
-            logicMock.Setup(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>())).Returns(true);
+            var logicMock = new Mock<IGame>();
+            logicMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Hit);
             logicMock.Setup(l => l.IsGameWon()).Returns(false);
 
             var messegerMock = new Mock<IMessager>();
@@ -57,15 +58,15 @@ namespace Battleships.Tests
 
             ui.Fire(0,0,"player");
 
-            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex(".*Hit.*")), Times.Once());
+            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+            messegerMock.Verify(m => m.Write(It.IsRegex("Hit!")), Times.Once());
         }
 
         [Test]
         public void Fire_Miss_WritesMissMessage()
         {
-            var logicMock = new Mock<IGameLogic>();
-            logicMock.Setup(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>())).Returns(false);
+            var logicMock = new Mock<IGame>();
+            logicMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Miss);
             logicMock.Setup(l => l.IsGameWon()).Returns(false);
 
             var messegerMock = new Mock<IMessager>();
@@ -75,7 +76,7 @@ namespace Battleships.Tests
 
             ui.Fire(0, 0, "player");
 
-            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Miss")), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Once());
         }
@@ -83,8 +84,8 @@ namespace Battleships.Tests
         [Test]
         public void Fire_HitAdWon_WritesWonMessageWithPropperPlayerName()
         {
-            var logicMock = new Mock<IGameLogic>();
-            logicMock.Setup(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>())).Returns(true);
+            var logicMock = new Mock<IGame>();
+            logicMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.HitAndSunk);
             logicMock.Setup(l => l.IsGameWon()).Returns(true);
 
             var messegerMock = new Mock<IMessager>();
@@ -95,8 +96,8 @@ namespace Battleships.Tests
             string player = "player";
             ui.Fire(0, 0, player);
 
-            logicMock.Verify(l => l.CheckField(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex("Hit")), Times.Once());
+            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+            messegerMock.Verify(m => m.Write(It.IsRegex("Hit and sunk")), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex($"{player} won!")), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Exactly(2));
         }
