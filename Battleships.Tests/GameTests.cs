@@ -8,7 +8,7 @@ namespace Battleships.Tests
     internal class GameTests
     {
         [Test]
-        public void Shoot_FieldWithShipNotSunk_ReturnsHit()
+        public void Shoot_FieldWithShipHighHp_ReturnsHit()
         {
             int x = 1, y = 1;
             const int shipLength = 5;
@@ -27,7 +27,7 @@ namespace Battleships.Tests
         }
         
         [Test]
-        public void Shoot_FieldWithShipSunk_ReturnsHitAndSunk()
+        public void Shoot_FieldWithShipWithLastHp_ReturnsHitAndSunk()
         {
             int x = 1, y = 1;
             const int shipLength = 1;
@@ -49,7 +49,6 @@ namespace Battleships.Tests
         public void Shoot_FieldWithoutShip_ReturnsMiss()
         {
             int x = 1, y = 1;
-            const int shipLength = 1;
             var field = new Field();
             var boardMock = new Mock<IBoard>();
             boardMock.Setup(b => b.GetField(x,y)).Returns(field);
