@@ -5,12 +5,12 @@ namespace Battleships
 {
     public class UI
     {
-        private readonly IGameLogic logic;
+        private readonly IGame logic;
         private readonly IMessager messager;
         private readonly IInputTranslator inputTranslator;
         private bool _isRunning = true;
 
-        public UI(IGameLogic logic, IMessager messager, IInputTranslator inputTranslator)
+        public UI(IGame logic, IMessager messager, IInputTranslator inputTranslator)
         {
             this.logic = logic;
             this.messager = messager;
@@ -48,8 +48,14 @@ namespace Battleships
 
         public void Fire(int x, int y, string playerName)
         {
-            var isHit = logic.CheckField(x, y); //todo struct with more info
-            var message = isHit ? "Hit!" : "Miss";
+            var isHit = logic.Shoot(x, y); //todo struct with more info
+            string message = string.Empty;
+            switch (isHit)
+            {
+                case Models.EShootResult.Hit: message = "Hit!"; break;
+                case Models.EShootResult.Miss: message = "Miss..."; break;
+                case Models.EShootResult.HitAndSunk: message = "Hit and sunk"; break;
+            }
             messager.Write(message);
 
             var isGameWon = logic.IsGameWon();
