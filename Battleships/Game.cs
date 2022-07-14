@@ -7,13 +7,12 @@ namespace Battleships
     {
         public IBoard Board { get; }
         public List<Ship> Ships { get; }
-        public int BoardSize { get; }
+        public int BoardSize => Board.Size;
 
-        public Game(int boardSize, IBoard? board = null)
+        public Game(int boardSize = 10, IBoard? board = null)
         {
             Board = board ?? new Board(boardSize);
             Ships = new List<Ship>();
-            BoardSize = boardSize;
 
             var battleship = new Ship(5);
             PlaceShipOnBoard(battleship);
@@ -63,8 +62,8 @@ namespace Battleships
 
             void GetPossibleShipCoordinates(out int start1, out int start2, out int end1, out int end2)
             {
-                start1 = rand.Next(0, BoardSize - ship.Length);
-                start2 = rand.Next(0, BoardSize);
+                start1 = rand.Next(0, BoardSize - ship.Length - 1);
+                start2 = rand.Next(0, BoardSize - 1);
                 end1 = start1 + ship.Length;
                 end2 = start2;
             }
