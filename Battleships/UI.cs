@@ -5,14 +5,14 @@ namespace Battleships
 {
     public class UI
     {
-        private readonly IGame logic;
+        private readonly IGame game;
         private readonly IMessager messager;
         private readonly IInputTranslator inputTranslator;
         private bool _isRunning = true;
 
-        public UI(IGame logic, IMessager messager, IInputTranslator inputTranslator)
+        public UI(IGame game, IMessager messager, IInputTranslator inputTranslator)
         {
-            this.logic = logic;
+            this.game = game;
             this.messager = messager;
             this.inputTranslator = inputTranslator;
         }
@@ -31,14 +31,14 @@ namespace Battleships
             {
                 string input = messager.GetInput();
                 (int x, int y) = inputTranslator.GetCoordinatesFromInput(input);
-
-                const string playerName = "player";
-
                 Shoot(x, y);
 
-                const string computerName = "computer";
-
-                Shoot(0, 0);//todo logic for coordinates
+                var isGameWon = game.IsGameWon();
+                if (isGameWon)
+                {
+                    messager.Write($"You won!");
+                    _isRunning = false;
+                }
             }
             catch (InvalidInputException)
             {
@@ -48,7 +48,7 @@ namespace Battleships
 
         public void Shoot(int x, int y)
         {
-            var isHit = logic.Shoot(x, y); //todo struct with more info
+            var isHit = game.Shoot(x, y); //todo struct with more info
             string message = string.Empty;
             switch (isHit)
             {
@@ -57,13 +57,6 @@ namespace Battleships
                 case Models.EShootResult.HitAndSunk: message = "Hit and sunk"; break;
             }
             messager.Write(message);
-
-            var isGameWon = logic.IsGameWon();
-            if (isGameWon)
-            {
-                messager.Write($" won!");
-                _isRunning = false;
-            }
         }
     }
 }
