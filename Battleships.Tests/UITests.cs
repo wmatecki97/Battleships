@@ -8,7 +8,7 @@ namespace Battleships.Tests
     public class UITests
     {
         [Test]
-        public void ProcessNextRound_ValidField_RunsGameLogicForBothPlayerAndComputer()
+        public void ProcessNextRound_ValidField_RunsGameLogic()
         {
             var logicMock = new Mock<IGame>();
             var messegerMock = new Mock<IMessager>();
@@ -22,8 +22,7 @@ namespace Battleships.Tests
 
             ui.ProcessNextRound();
 
-            const int PlayersCount = 2;
-            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(PlayersCount));
+            logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
         [Test]
@@ -56,7 +55,7 @@ namespace Battleships.Tests
 
             var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            ui.Fire(0,0,"player");
+            ui.Fire(0,0);
 
             logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Hit!")), Times.Once());
@@ -74,7 +73,7 @@ namespace Battleships.Tests
 
             var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            ui.Fire(0, 0, "player");
+            ui.Fire(0, 0);
 
             logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Miss")), Times.Once());
@@ -82,7 +81,7 @@ namespace Battleships.Tests
         }
 
         [Test]
-        public void Fire_HitAdWon_WritesWonMessageWithPropperPlayerName()
+        public void Fire_HitAdWon_WritesWonMessage()
         {
             var logicMock = new Mock<IGame>();
             logicMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.HitAndSunk);
@@ -93,12 +92,11 @@ namespace Battleships.Tests
 
             var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            string player = "player";
-            ui.Fire(0, 0, player);
+            ui.Fire(0, 0);
 
             logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Hit and sunk")), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex($"{player} won!")), Times.Once());
+            messegerMock.Verify(m => m.Write(It.IsRegex($"You won!")), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Exactly(2));
         }
     }
