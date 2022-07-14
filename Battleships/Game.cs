@@ -69,7 +69,7 @@ namespace Battleships
             }
         }
 
-        public EShootResult Shoot(int x, int y)
+        public virtual EShootResult Shoot(int x, int y)
         {
             return EShootResult.Miss;
         }
