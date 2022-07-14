@@ -10,7 +10,7 @@ namespace Battleships.Tests
         [Test]
         public void Init_RandomShipPlacement_AllShipsHaveCorrectNoOfFieldsAssigned()
         {
-            var game = new Game(10);
+            var game = new Game();
 
             game.Ships.ForEach(s => s.Fields.Count.Should().Be(s.Length));
             int noOfFieldsWithShips = game.Board.Fields.Where(f => f.Ship is not null).Count();
@@ -85,7 +85,7 @@ namespace Battleships.Tests
 
             var result = game.Shoot(x, y);
 
-            field.isHit.Should().BeTrue();
+            field.IsHit.Should().BeTrue();
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace Battleships.Tests
 
             var result = game.Shoot(x, y);
 
-            field.isHit.Should().BeTrue();
+            field.IsHit.Should().BeTrue();
         }
 
         #endregion
@@ -125,7 +125,7 @@ namespace Battleships.Tests
                 ship.Fields.Add(
                  new Field()
                  {
-                     isHit = true
+                     IsHit = true
                  }
                 );
 
