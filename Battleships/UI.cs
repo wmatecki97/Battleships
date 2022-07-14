@@ -46,9 +46,9 @@ namespace Battleships
             }
         }
 
-        public void Shoot(int x, int y)
+        public virtual void Shoot(int x, int y)
         {
-            var isHit = game.Shoot(x, y); //todo struct with more info
+            var isHit = game.Shoot(x, y);
             string message = string.Empty;
             switch (isHit)
             {
