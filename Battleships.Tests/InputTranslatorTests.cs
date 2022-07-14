@@ -8,7 +8,7 @@ namespace Battleships.Tests
         [Test]
         [TestCase("a0", 0, 0)]
         [TestCase("b5", 1, 5)]
-        [TestCase("j10", 9, 9)]
+        [TestCase("j9", 9, 9)]
         public void GetCoordinatesFromInput_ValidInput_ReturnsParsedCoordinates(string input, int x, int y)
         {
             var translator = new InputTranslator();
