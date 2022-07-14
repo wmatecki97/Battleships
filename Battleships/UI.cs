@@ -43,7 +43,7 @@ namespace Battleships
             }
             catch (InvalidInputException)
             {
-                messager.Write($"Field coordinates should be a character followed by a number e.g. a1 in range 0-{game.Board.Size-1}");
+                messager.Write($"Field coordinates should be a character A-{(char)('A'+game.Board.Size-1)} followed by a number 0-{game.Board.Size - 1} e.g. a1");
             }
         }
 
