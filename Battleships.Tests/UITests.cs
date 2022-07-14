@@ -55,7 +55,7 @@ namespace Battleships.Tests
 
             var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            ui.Fire(0,0);
+            ui.Shoot(0,0);
 
             logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Hit!")), Times.Once());
@@ -73,7 +73,7 @@ namespace Battleships.Tests
 
             var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            ui.Fire(0, 0);
+            ui.Shoot(0, 0);
 
             logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Miss")), Times.Once());
@@ -92,7 +92,7 @@ namespace Battleships.Tests
 
             var ui = new UI(logicMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            ui.Fire(0, 0);
+            ui.Shoot(0, 0);
 
             logicMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
             messegerMock.Verify(m => m.Write(It.IsRegex("Hit and sunk")), Times.Once());

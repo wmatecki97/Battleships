@@ -93,6 +93,7 @@ namespace Battleships.Tests
 
         #endregion
 
+        #region IsGameWonTests
         [Test]
         public void IsGameWon_AllShipsDestroyed_ReturnsTrue()
         {
@@ -167,4 +168,5 @@ namespace Battleships.Tests
             }
         }
     }
+    #endregion
 }

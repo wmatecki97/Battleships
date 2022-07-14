@@ -13,6 +13,61 @@ namespace Battleships
         {
             Board = board ?? new Board(boardSize);
             Ships = new List<Ship>();
+            BoardSize = boardSize;
+
+            var battleship = new Ship(5);
+            PlaceShipOnBoard(battleship);
+            var destroyer1 = new Ship(4);
+            PlaceShipOnBoard(destroyer1);
+            var destroyer2 = new Ship(4);
+            PlaceShipOnBoard(destroyer2);
+        }
+
+        private void PlaceShipOnBoard(Ship ship)
+        {
+            Ships.Add(ship);
+            bool isFieldFree = false;
+            var rand = new Random();
+            while (!isFieldFree)
+            {
+                var isShipPlacedHorizontally = rand.Next(0, 1) == 0;
+                int startX, startY, endX, endY;
+
+                if (isShipPlacedHorizontally)
+                {
+                    GetPossibleShipCoordinates(out startX, out startY, out endX, out endY);
+                }
+                else
+                {
+                    GetPossibleShipCoordinates(out startY, out startX, out endY, out endX);
+                }
+
+                var xValues = Enumerable.Range(startX, endX);
+                var yValues = Enumerable.Range(startY, endY);
+                var fieldsToCheck = from x in xValues
+                                    from y in yValues
+                                    select new { X = x, Y = y };
+
+                var consideredFields = fieldsToCheck.Select(f => Board.GetField(f.X, f.Y)).ToList();
+                isFieldFree = consideredFields.All(f => f.Ship is null);
+                if (isFieldFree)
+                {
+                    consideredFields.ForEach(f =>
+                        {
+                            f.Ship = ship;
+                            ship.Fields.Add(f);
+                        });
+                }
+
+            }
+
+            void GetPossibleShipCoordinates(out int start1, out int start2, out int end1, out int end2)
+            {
+                start1 = rand.Next(0, BoardSize - ship.Length);
+                start2 = rand.Next(0, BoardSize);
+                end1 = start1 + ship.Length;
+                end2 = start2;
+            }
         }
 
         public EShootResult Shoot(int x, int y)
