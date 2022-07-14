@@ -5,24 +5,14 @@ namespace Battleships
 {
     public class Game : IGame
     {
-        public Player Player1 { get; set; }
-        public Player Player2 { get; set; }
+        public IBoard Board { get; }
+        public List<Ship> Ships { get; }
+        public int BoardSize { get; }
 
-        public int BoardSize { get; set; }
-
-        public Game(string player1Name, string player2Name, int boardSize, IBoard? player1Board = null, IBoard? player2Board = null)
+        public Game(int boardSize, IBoard? board = null)
         {
-            Player1 = new Player
-            {
-                Board = player1Board ?? new Board(boardSize),
-                Name = player1Name,
-            };
-
-            Player2 = new Player
-            {
-                Board = player2Board ?? new Board(boardSize),
-                Name = player2Name,
-            };
+            Board = board ?? new Board(boardSize);
+            Ships = new List<Ship>();
         }
 
         public EShootResult Shoot(int x, int y)
