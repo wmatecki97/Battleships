@@ -58,6 +58,29 @@ namespace Battleships.Tests
         }
 
         [Test]
+        public void Shoot_AlreadyHitField_ReturnsAlreadyHitStatus()
+        {
+            //Arrange
+            int x = 1, y = 1;
+            const int shipLength = 1;
+            var field = new Field
+            {
+                Ship = new Ship(shipLength),
+                IsHit = true
+            };
+            var boardMock = new Mock<IBoard>();
+            boardMock.Setup(b => b.GetField(x, y)).Returns(field);
+            var initializer = new Mock<IGameInitializer>().Object;
+            var game = new Game(board: boardMock.Object, initializer: initializer);
+
+            //Act
+            var result = game.Shoot(x, y);
+
+            //Assert
+            result.Should().Be(EShootResult.AlreadyHit);
+        }
+
+        [Test]
         public void Shoot_FieldWithoutShip_ReturnsMiss()
         {
             //Arrange

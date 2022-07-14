@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Interfaces
 {
-    public interface IMessager
+    public interface IMessenger
     {
         string GetInput();
         void Write(string message);

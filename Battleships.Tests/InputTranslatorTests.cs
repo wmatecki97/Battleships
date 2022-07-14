@@ -23,7 +23,8 @@ namespace Battleships.Tests
         [TestCase("AB11")]
         [TestCase("A11")]
         [TestCase("AB1")]
-        public void GetCoordinatesFromInput_InvalidInput_ThrowsException(string input)
+        [TestCase("Z1")]
+        public void GetCoordinatesFromInput_InvalidInput_ThrowsInvalidInputException(string input)
         {
             var translator = new InputTranslator();
             Assert.Throws<InvalidInputException>(() => translator.GetCoordinatesFromInput(input));

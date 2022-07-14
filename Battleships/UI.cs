@@ -6,11 +6,11 @@ namespace Battleships
     public class UI
     {
         private readonly IGame game;
-        private readonly IMessager messager;
+        private readonly IMessenger messager;
         private readonly IInputTranslator inputTranslator;
         private bool _isRunning = true;
 
-        public UI(IGame game, IMessager messager, IInputTranslator inputTranslator)
+        public UI(IGame game, IMessenger messager, IInputTranslator inputTranslator)
         {
             this.game = game;
             this.messager = messager;
@@ -19,6 +19,7 @@ namespace Battleships
 
         public void Run()
         {
+            messager.Write("Please type the field coordinates you want to shoot e.g. A1");
             while (_isRunning)
             {
                 ProcessNextRound();
@@ -42,7 +43,7 @@ namespace Battleships
             }
             catch (InvalidInputException)
             {
-                messager.Write("Field coordinates should be a character followed by a number e.g. a1");
+                messager.Write($"Field coordinates should be a character followed by a number e.g. a1 in range 0-{game.Board.Size-1}");
             }
         }
 
@@ -55,6 +56,7 @@ namespace Battleships
                 case Models.EShootResult.Hit: message = "Hit!"; break;
                 case Models.EShootResult.Miss: message = "Miss..."; break;
                 case Models.EShootResult.HitAndSunk: message = "Hit and sunk"; break;
+                case Models.EShootResult.AlreadyHit: message = "Already hit"; break;
             }
             messager.Write(message);
         }

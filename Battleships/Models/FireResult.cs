@@ -4,6 +4,7 @@
     {
         Hit,
         Miss,
-        HitAndSunk
+        HitAndSunk,
+        AlreadyHit
     }
 }

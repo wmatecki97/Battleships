@@ -17,7 +17,7 @@ namespace Battleships
 
         protected virtual void ValidateInputThrowException(string input)
         {
-            if (input.Length != 2 || !Regex.IsMatch(input, "[A-Z][0-9]"))
+            if (input.Length != 2 || !Regex.IsMatch(input, "[A-J][0-9]"))
                 throw new InvalidInputException();
         }
     }

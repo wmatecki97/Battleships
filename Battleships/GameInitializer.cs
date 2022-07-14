@@ -68,7 +68,7 @@ namespace Battleships
 
             void GetPossibleShipCoordinates(out int start1, out int start2, out int end1, out int end2)
             {
-                start1 = rand.Next(0, game.Board.Size - ship.Length - 1);
+                start1 = rand.Next(0, game.Board.Size - ship.Length);
                 start2 = rand.Next(0, game.Board.Size - 1);
                 end1 = start1 + ship.Length;
                 end2 = start2;

@@ -19,6 +19,11 @@ namespace Battleships
         public virtual EShootResult Shoot(int x, int y)
         {
             var field = Board.GetField(x, y);
+            if(field.IsHit)
+            {
+                return EShootResult.AlreadyHit;
+            }
+
             field.IsHit = true;
 
             if (field.Ship is not null)
