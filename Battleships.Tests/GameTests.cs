@@ -7,6 +7,17 @@ namespace Battleships.Tests
 {
     internal class GameTests
     {
+        [Test]
+        public void Init_RandomShipPlacement_AllShipsHaveCorrectNoOfFieldsAssigned()
+        {
+            var game = new Game(10);
+
+            game.Ships.ForEach(s => s.Fields.Count.Should().Be(s.Length));
+            int noOfFieldsWithShips = game.Board.Fields.Where(f => f.Ship is not null).Count();
+            int totalShipsLength = game.Ships.Sum(s => s.Length);
+            noOfFieldsWithShips.Should().Be(totalShipsLength);
+        }
+
         #region ShootTests
         [Test]
         public void Shoot_FieldWithShipHighHp_ReturnsHit()
@@ -93,6 +104,7 @@ namespace Battleships.Tests
 
         #endregion
 
+        #region IsGameWonTests
         [Test]
         public void IsGameWon_AllShipsDestroyed_ReturnsTrue()
         {
@@ -166,5 +178,6 @@ namespace Battleships.Tests
                 return ship;
             }
         }
+        #endregion
     }
 }

@@ -34,11 +34,11 @@ namespace Battleships
 
                 const string playerName = "player";
 
-                Fire(x, y);
+                Shoot(x, y);
 
                 const string computerName = "computer";
 
-                Fire(0, 0);//todo logic for coordinates
+                Shoot(0, 0);//todo logic for coordinates
             }
             catch (InvalidInputException)
             {
@@ -46,7 +46,7 @@ namespace Battleships
             }
         }
 
-        public void Fire(int x, int y)
+        public void Shoot(int x, int y)
         {
             var isHit = logic.Shoot(x, y); //todo struct with more info
             string message = string.Empty;
