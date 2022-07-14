@@ -8,7 +8,7 @@ namespace Battleships
         public IBoard Board { get; }
         public List<Ship> Ships { get; }
 
-        public Game(int boardSize = 10, IBoard? board = null, IGameInitializer initializer = null)
+        public Game(int boardSize = 10, IBoard? board = null, IGameInitializer? initializer = null)
         {
             Board = board ?? new Board(boardSize);
             Ships = new List<Ship>();

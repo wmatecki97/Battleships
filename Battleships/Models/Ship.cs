@@ -3,6 +3,7 @@
     public class Ship
     {
         public int Length { get; }
+
         public List<Field> Fields { get; }
 
         public Ship(int length)

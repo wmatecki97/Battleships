@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Battleships;
+﻿using Battleships;
 
 var game = new Game();
 
