@@ -1,18 +1,23 @@
 ﻿using Battleships.Interfaces;
-using Battleships.Models;
+using Battleships.Models.Ships;
 
 namespace Battleships
 {
-    internal class RandomGameInitializer : IGameInitializer
+    public class RandomGameInitializer : IGameInitializer
     {
-        public void Initialize(IGame game)
+        public void Initialize(IGame game, IEnumerable<Ship>? ships = null)
         {
-            var battleship = new Ship(5);
-            PlaceShipOnBoard(battleship, game);
-            var destroyer1 = new Ship(4);
-            PlaceShipOnBoard(destroyer1, game);
-            var destroyer2 = new Ship(4);
-            PlaceShipOnBoard(destroyer2, game);
+            ships ??= new Ship[]
+            {
+                new Battleship(),
+                new Destroyer(),
+                new Destroyer()
+            };
+
+            foreach(var ship in ships)
+            {
+                PlaceShipOnBoard(ship, game);
+            }
         }
 
         private void PlaceShipOnBoard(Ship ship, IGame game)
@@ -20,6 +25,7 @@ namespace Battleships
             game.Ships.Add(ship);
             bool isFieldFree = false;
             var rand = new Random();
+
             while (!isFieldFree)
             {
                 var isShipPlacedHorizontally = rand.Next(0, 1) == 0;
@@ -42,6 +48,7 @@ namespace Battleships
 
                 var consideredFields = fieldsToCheck.Select(f => game.Board.GetField(f.X, f.Y)).ToList();
                 isFieldFree = consideredFields.All(f => f.Ship is null);
+
                 if (isFieldFree)
                 {
                     consideredFields.ForEach(f =>

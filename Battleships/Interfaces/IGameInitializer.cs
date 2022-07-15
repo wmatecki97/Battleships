@@ -1,7 +1,9 @@
-﻿namespace Battleships.Interfaces
+﻿using Battleships.Models.Ships;
+
+namespace Battleships.Interfaces
 {
     public interface IGameInitializer
     {
-        void Initialize(IGame game);
+        void Initialize(IGame game, IEnumerable<Ship>? ships = null);
     }
 }

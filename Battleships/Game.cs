@@ -1,5 +1,6 @@
 ﻿using Battleships.Interfaces;
 using Battleships.Models;
+using Battleships.Models.Ships;
 
 namespace Battleships
 {
@@ -19,7 +20,8 @@ namespace Battleships
         public virtual EShootResult Shoot(int x, int y)
         {
             var field = Board.GetField(x, y);
-            if(field.IsHit)
+
+            if (field.IsHit)
             {
                 return EShootResult.AlreadyHit;
             }
@@ -30,6 +32,7 @@ namespace Battleships
             {
                 return field.Ship.Fields.All(f => f.IsHit) ? EShootResult.HitAndSunk : EShootResult.Hit;
             }
+
             return EShootResult.Miss;
         }
 

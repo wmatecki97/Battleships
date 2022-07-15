@@ -1,4 +1,5 @@
 ﻿using Battleships.Models;
+using Battleships.Models.Ships;
 
 namespace Battleships.Interfaces
 {

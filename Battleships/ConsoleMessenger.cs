@@ -6,7 +6,7 @@ namespace Battleships
     {
         public string GetInput()
         {
-            return Console.ReadLine();
+            return Console.ReadLine() ?? string.Empty;
         }
 
         public void Write(string message)

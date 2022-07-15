@@ -1,5 +1,6 @@
 ﻿using Battleships.Interfaces;
 using Battleships.Models;
+using Battleships.Models.Ships;
 using FluentAssertions;
 using Moq;
 
