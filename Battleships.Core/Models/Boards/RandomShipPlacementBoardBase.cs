@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Battleships.Core.Models.Boards
 {
-    public class RandomShipPlacementBoardBaseBase : BoardBase
+    public class RandomShipPlacementBoardBase : BoardBase
     {
-        protected RandomShipPlacementBoardBaseBase(IEnumerable<IShip> ships, int size) : base(ships, size)
+        protected RandomShipPlacementBoardBase(IEnumerable<IShip> ships, int size) : base(ships, size)
         {
             foreach (var ship in Ships)
             {

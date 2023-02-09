@@ -27,7 +27,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
         var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(board: boardMock.Object, initializer: initializer);
+        var game = new GameLogic(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -49,7 +49,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
         var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(board: boardMock.Object, initializer: initializer);
+        var game = new GameLogic(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -71,7 +71,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
         var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(board: boardMock.Object, initializer: initializer);
+        var game = new GameLogic(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -89,7 +89,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
         var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(board: boardMock.Object, initializer: initializer);
+        var game = new GameLogic(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -110,7 +110,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
         var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(board: boardMock.Object, initializer: initializer);
+        var game = new GameLogic(boardMock.Object);
 
         //Act
         game.Shoot(x, y);
@@ -133,7 +133,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
         var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(board: boardMock.Object, initializer: initializer);
+        var game = new GameLogic(boardMock.Object);
 
         //Act
         game.Shoot(x, y);

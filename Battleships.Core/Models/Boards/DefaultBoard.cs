@@ -5,14 +5,15 @@ using Battleships.Core.Models.Ships;
 namespace Battleships.Core.Models.Boards;
 
 /// <summary>
-/// Default Board of size 10x10 that contains Battleship and two Destroyers
+/// Default Board of DefaultSize 10x10 that contains Battleship and two Destroyers
 /// </summary>
-public class DefaultBoard : RandomShipPlacementBoardBaseBase
+public class DefaultBoard : RandomShipPlacementBoardBase
 {
-    public DefaultBoard(int size) : base(DefaultShips, size)
+    public DefaultBoard() : base(DefaultShips, 10)
     {
     }
 
+    private static int DefaultSize => 10;
     private static readonly IEnumerable<IShip> DefaultShips = new Ship[]
     {
         new Battleship(),

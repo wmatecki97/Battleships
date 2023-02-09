@@ -4,6 +4,7 @@ using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models.Boards;
 
+//todo consider moving this to randomplacementboard
 public abstract class BoardBase : IBoard
 {
     protected BoardBase(IEnumerable<IShip> ships, int size)
