@@ -4,7 +4,7 @@ using Battleships.Models.Ships;
 
 namespace Battleships;
 
-public class Game : IGame
+public sealed class Game : IGame
 {
     public Game(int boardSize = 10, IBoard? board = null, IGameInitializer? initializer = null)
     {
@@ -17,7 +17,7 @@ public class Game : IGame
     public IBoard Board { get; }
     public List<Ship> Ships { get; }
 
-    public virtual EShootResult Shoot(int x, int y)
+    public EShootResult Shoot(int x, int y)
     {
         var field = Board.GetField(x, y);
 

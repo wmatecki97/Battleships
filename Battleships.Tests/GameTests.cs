@@ -22,7 +22,7 @@ internal class GameTests
         {
             Ship = ship
         };
-        ship.Fields.AddRange(Enumerable.Range(0, shipLength).Select(i => new Field()));
+        ship.Fields.AddRange(Enumerable.Range(0, shipLength).Select(_ => new Field()));
 
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
@@ -115,7 +115,7 @@ internal class GameTests
         var game = new Game(board: boardMock.Object, initializer: initializer);
 
         //Act
-        var result = game.Shoot(x, y);
+        game.Shoot(x, y);
 
         //Assert
         field.IsHit.Should().BeTrue();
@@ -138,10 +138,10 @@ internal class GameTests
         var game = new Game(board: boardMock.Object, initializer: initializer);
 
         //Act
-        var result = game.Shoot(x, y);
+        game.Shoot(x, y);
 
         //Assert
-        ship.Fields.Where(f => f.IsHit).Count().Should().Be(1);
+        ship.Fields.Count(f => f.IsHit).Should().Be(1);
     }
 
     #endregion

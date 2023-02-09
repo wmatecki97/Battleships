@@ -4,7 +4,7 @@ using Battleships.Interfaces;
 
 namespace Battleships;
 
-public class InputTranslator : IInputTranslator
+public sealed class InputTranslator : IInputTranslator
 {
     public (int, int) GetCoordinatesFromInput(string input)
     {
@@ -15,7 +15,7 @@ public class InputTranslator : IInputTranslator
         return (x, y);
     }
 
-    protected virtual void ValidateInputThrowException(string input)
+    private void ValidateInputThrowException(string input)
     {
         if (input.Length != 2 || !Regex.IsMatch(input, "[A-J][0-9]"))
             throw new InvalidInputException();

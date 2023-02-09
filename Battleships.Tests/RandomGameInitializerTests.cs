@@ -22,7 +22,7 @@ internal class RandomGameInitializerTests
 
         initializer.Initialize(gameMock.Object);
 
-        ships.Where(s => s is Battleship).Count().Should().Be(1);
-        ships.Where(s => s is Destroyer).Count().Should().Be(2);
+        ships.Count(s => s is Battleship).Should().Be(1);
+        ships.Count(s => s is Destroyer).Should().Be(2);
     }
 }

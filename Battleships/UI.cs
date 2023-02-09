@@ -4,7 +4,7 @@ using Battleships.Models;
 
 namespace Battleships;
 
-public class Ui
+public sealed class Ui
 {
     private readonly IGame _game;
     private readonly IInputTranslator _inputTranslator;
@@ -49,7 +49,7 @@ public class Ui
         }
     }
 
-    public virtual void Shoot(int x, int y)
+    public void Shoot(int x, int y)
     {
         var isHit = _game.Shoot(x, y);
         string message = string.Empty;

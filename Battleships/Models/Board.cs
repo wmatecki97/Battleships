@@ -7,7 +7,7 @@ public class Board : IBoard
     public Board(int size)
     {
         int fieldsCount = size * size;
-        Fields = Enumerable.Range(0, fieldsCount).Select(x => new Field()).ToArray();
+        Fields = Enumerable.Range(0, fieldsCount).Select(_ => new Field()).ToArray();
         Size = size;
     }
 
