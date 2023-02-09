@@ -2,43 +2,42 @@
 using Battleships.Models;
 using Battleships.Models.Ships;
 
-namespace Battleships
+namespace Battleships;
+
+public class Game : IGame
 {
-    public class Game : IGame
+    public Game(int boardSize = 10, IBoard? board = null, IGameInitializer? initializer = null)
     {
-        public IBoard Board { get; }
-        public List<Ship> Ships { get; }
+        Board = board ?? new Board(boardSize);
+        Ships = new List<Ship>();
+        initializer ??= new RandomGameInitializer();
+        initializer.Initialize(this);
+    }
 
-        public Game(int boardSize = 10, IBoard? board = null, IGameInitializer? initializer = null)
+    public IBoard Board { get; }
+    public List<Ship> Ships { get; }
+
+    public virtual EShootResult Shoot(int x, int y)
+    {
+        var field = Board.GetField(x, y);
+
+        if (field.IsHit)
         {
-            Board = board ?? new Board(boardSize);
-            Ships = new List<Ship>();
-            initializer ??= new RandomGameInitializer();
-            initializer.Initialize(this);
+            return EShootResult.AlreadyHit;
         }
 
-        public virtual EShootResult Shoot(int x, int y)
+        field.IsHit = true;
+
+        if (field.Ship is not null)
         {
-            var field = Board.GetField(x, y);
-
-            if (field.IsHit)
-            {
-                return EShootResult.AlreadyHit;
-            }
-
-            field.IsHit = true;
-
-            if (field.Ship is not null)
-            {
-                return field.Ship.Fields.All(f => f.IsHit) ? EShootResult.HitAndSunk : EShootResult.Hit;
-            }
-
-            return EShootResult.Miss;
+            return field.Ship.Fields.All(f => f.IsHit) ? EShootResult.HitAndSunk : EShootResult.Hit;
         }
 
-        public bool IsGameWon()
-        {
-            return Ships.All(s => s.Fields.All(f => f.IsHit));
-        }
+        return EShootResult.Miss;
+    }
+
+    public bool IsGameWon()
+    {
+        return Ships.All(s => s.Fields.All(f => f.IsHit));
     }
 }

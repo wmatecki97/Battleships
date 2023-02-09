@@ -4,26 +4,25 @@ using Battleships.Models.Ships;
 using FluentAssertions;
 using Moq;
 
-namespace Battleships.Tests
+namespace Battleships.Tests;
+
+internal class RandomGameInitializerTests
 {
-    internal class RandomGameInitializerTests
+    [Test]
+    public void Init_DefaultInitialization_AddsTwoDestroyersAndBattleshipToTheBoardByDefault()
     {
-        [Test]
-        public void Init_DefaultInitialization_AddsTwoDestroyersAndBattleshipToTheBoardByDefault()
-        {
-            var gameMock = new Mock<IGame>();
-            var ships = new List<Ship>();
-            gameMock.Setup(g => g.Ships).Returns(ships);
-            var boardMock = new Mock<IBoard>();
-            boardMock.Setup(b => b.Size).Returns(10);
-            boardMock.Setup(b => b.GetField(It.IsAny<int>(), It.IsAny<int>())).Returns(() => new Field());
-            gameMock.Setup(g => g.Board).Returns(boardMock.Object);
-            var initializer = new RandomGameInitializer();
+        var gameMock = new Mock<IGame>();
+        var ships = new List<Ship>();
+        gameMock.Setup(g => g.Ships).Returns(ships);
+        var boardMock = new Mock<IBoard>();
+        boardMock.Setup(b => b.Size).Returns(10);
+        boardMock.Setup(b => b.GetField(It.IsAny<int>(), It.IsAny<int>())).Returns(() => new Field());
+        gameMock.Setup(g => g.Board).Returns(boardMock.Object);
+        var initializer = new RandomGameInitializer();
 
-            initializer.Initialize(gameMock.Object);
+        initializer.Initialize(gameMock.Object);
 
-            ships.Where(s => s is Battleship).Count().Should().Be(1);
-            ships.Where(s => s is Destroyer).Count().Should().Be(2);
-        }
+        ships.Where(s => s is Battleship).Count().Should().Be(1);
+        ships.Where(s => s is Destroyer).Count().Should().Be(2);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Battleships.Interfaces
+﻿namespace Battleships.Interfaces;
+
+public interface IInputTranslator
 {
-    public interface IInputTranslator
-    {
-        (int, int) GetCoordinatesFromInput(string input);
-    }
+    (int, int) GetCoordinatesFromInput(string input);
 }

@@ -1,9 +1,8 @@
-﻿namespace Battleships.Models.Ships
+﻿namespace Battleships.Models.Ships;
+
+public class Destroyer : Ship
 {
-    public class Destroyer : Ship
+    public Destroyer() : base(4)
     {
-        public Destroyer() : base(4)
-        {
-        }
     }
 }

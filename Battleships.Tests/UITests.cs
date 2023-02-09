@@ -3,121 +3,120 @@ using Battleships.Interfaces;
 using Battleships.Models;
 using Moq;
 
-namespace Battleships.Tests
+namespace Battleships.Tests;
+
+public class UiTests
 {
-    public class UITests
+    [Test]
+    public void ProcessNextRound_ValidField_RunsGameLogic()
     {
-        [Test]
-        public void ProcessNextRound_ValidField_RunsGameLogic()
-        {
-            var gameMock = new Mock<IGame>();
-            var messegerMock = new Mock<IMessenger>();
-            const string validField = "A0";
-            messegerMock.Setup(m => m.GetInput()).Returns(validField);
+        var gameMock = new Mock<IGame>();
+        var messegerMock = new Mock<IMessenger>();
+        const string validField = "A0";
+        messegerMock.Setup(m => m.GetInput()).Returns(validField);
 
-            var inputTranslator = new Mock<IInputTranslator>();
-            inputTranslator.Setup(t => t.GetCoordinatesFromInput(It.IsAny<string>())).Returns((0, 0));
-            
-            var ui = new UI(gameMock.Object, messegerMock.Object, inputTranslator.Object);
+        var inputTranslator = new Mock<IInputTranslator>();
+        inputTranslator.Setup(t => t.GetCoordinatesFromInput(It.IsAny<string>())).Returns((0, 0));
 
-            ui.ProcessNextRound();
+        var ui = new Ui(gameMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
-        }
+        ui.ProcessNextRound();
 
-        [Test]
-        public void ProcessNextRound_InvalidField_DontRunGameLogic()
-        {
-            const string input = "A0";
-            var gameMock = new Mock<IGame>();
-            gameMock.Setup(l => l.Board).Returns(new Mock<IBoard>().Object);
-            var messegerMock = new Mock<IMessenger>();
-            messegerMock.Setup(m => m.GetInput()).Returns(input);
+        gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+    }
 
-            var inputTranslator = new Mock<IInputTranslator>();
-            inputTranslator.Setup(t => t.GetCoordinatesFromInput(It.IsAny<string>())).Throws<InvalidInputException>();
+    [Test]
+    public void ProcessNextRound_InvalidField_DontRunGameLogic()
+    {
+        const string input = "A0";
+        var gameMock = new Mock<IGame>();
+        gameMock.Setup(l => l.Board).Returns(new Mock<IBoard>().Object);
+        var messegerMock = new Mock<IMessenger>();
+        messegerMock.Setup(m => m.GetInput()).Returns(input);
 
-            var ui = new UI(gameMock.Object, messegerMock.Object, inputTranslator.Object);
+        var inputTranslator = new Mock<IInputTranslator>();
+        inputTranslator.Setup(t => t.GetCoordinatesFromInput(It.IsAny<string>())).Throws<InvalidInputException>();
 
-            ui.ProcessNextRound();
+        var ui = new Ui(gameMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
-        }
+        ui.ProcessNextRound();
 
-        [Test]
-        public void ProcessNextRound_HitAdWon_WritesWonMessage()
-        {
-            var gameMock = new Mock<IGame>();
-            gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.HitAndSunk);
-            gameMock.Setup(l => l.IsGameWon()).Returns(true);
+        gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+    }
 
-            var messegerMock = new Mock<IMessenger>();
-            var inputTranslator = new Mock<IInputTranslator>();
+    [Test]
+    public void ProcessNextRound_HitAdWon_WritesWonMessage()
+    {
+        var gameMock = new Mock<IGame>();
+        gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.HitAndSunk);
+        gameMock.Setup(l => l.IsGameWon()).Returns(true);
 
-            var ui = new UI(gameMock.Object, messegerMock.Object, inputTranslator.Object);
+        var messegerMock = new Mock<IMessenger>();
+        var inputTranslator = new Mock<IInputTranslator>();
 
-            ui.ProcessNextRound();
+        var ui = new Ui(gameMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex("Hit and sunk")), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex($"You won!")), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Exactly(2));
-        }
+        ui.ProcessNextRound();
 
-        [Test]
-        public void Shoot_Hit_WritesHitMessage()
-        {
-            var gameMock = new Mock<IGame>();
-            gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Hit);
-            gameMock.Setup(l => l.IsGameWon()).Returns(false);
+        gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsRegex("Hit and sunk")), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsRegex("You won!")), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Exactly(2));
+    }
 
-            var messegerMock = new Mock<IMessenger>();
-            var inputTranslator = new Mock<IInputTranslator>();
+    [Test]
+    public void Shoot_Hit_WritesHitMessage()
+    {
+        var gameMock = new Mock<IGame>();
+        gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Hit);
+        gameMock.Setup(l => l.IsGameWon()).Returns(false);
 
-            var ui = new UI(gameMock.Object, messegerMock.Object, inputTranslator.Object);
+        var messegerMock = new Mock<IMessenger>();
+        var inputTranslator = new Mock<IInputTranslator>();
 
-            ui.Shoot(0,0);
+        var ui = new Ui(gameMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex("Hit!")), Times.Once());
-        }
+        ui.Shoot(0, 0);
 
-        [Test]
-        public void Shoot_Miss_WritesMissMessage()
-        {
-            var gameMock = new Mock<IGame>();
-            gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Miss);
-            gameMock.Setup(l => l.IsGameWon()).Returns(false);
+        gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsRegex("Hit!")), Times.Once());
+    }
 
-            var messegerMock = new Mock<IMessenger>();
-            var inputTranslator = new Mock<IInputTranslator>();
+    [Test]
+    public void Shoot_Miss_WritesMissMessage()
+    {
+        var gameMock = new Mock<IGame>();
+        gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Miss);
+        gameMock.Setup(l => l.IsGameWon()).Returns(false);
 
-            var ui = new UI(gameMock.Object, messegerMock.Object, inputTranslator.Object);
+        var messegerMock = new Mock<IMessenger>();
+        var inputTranslator = new Mock<IInputTranslator>();
 
-            ui.Shoot(0, 0);
+        var ui = new Ui(gameMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex("Miss")), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Once());
-        }
+        ui.Shoot(0, 0);
 
-        [Test]
-        public void Shoot_AlreadyHitField_WritesAlreadyHitMessage()
-        {
-            var gameMock = new Mock<IGame>();
-            gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.AlreadyHit);
-            gameMock.Setup(l => l.IsGameWon()).Returns(false);
+        gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsRegex("Miss")), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Once());
+    }
 
-            var messegerMock = new Mock<IMessenger>();
-            var inputTranslator = new Mock<IInputTranslator>();
+    [Test]
+    public void Shoot_AlreadyHitField_WritesAlreadyHitMessage()
+    {
+        var gameMock = new Mock<IGame>();
+        gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.AlreadyHit);
+        gameMock.Setup(l => l.IsGameWon()).Returns(false);
 
-            var ui = new UI(gameMock.Object, messegerMock.Object, inputTranslator.Object);
+        var messegerMock = new Mock<IMessenger>();
+        var inputTranslator = new Mock<IInputTranslator>();
 
-            ui.Shoot(0, 0);
+        var ui = new Ui(gameMock.Object, messegerMock.Object, inputTranslator.Object);
 
-            gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsRegex("Already hit")), Times.Once());
-            messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Once());
-        }
+        ui.Shoot(0, 0);
+
+        gameMock.Verify(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsRegex("Already hit")), Times.Once());
+        messegerMock.Verify(m => m.Write(It.IsAny<string>()), Times.Once());
     }
 }

@@ -1,23 +1,22 @@
 ﻿using Battleships.Interfaces;
 
-namespace Battleships.Models
+namespace Battleships.Models;
+
+public class Board : IBoard
 {
-    public class Board : IBoard
+    public Board(int size)
     {
-        public Field[] Fields { get; }
+        int fieldsCount = size * size;
+        Fields = Enumerable.Range(0, fieldsCount).Select(x => new Field()).ToArray();
+        Size = size;
+    }
 
-        public int Size { get; }
+    public Field[] Fields { get; }
 
-        public Board(int size)
-        {
-            int fieldsCount = size * size;
-            Fields = Enumerable.Range(0, fieldsCount).Select(x => new Field()).ToArray();
-            Size = size;
-        }
+    public int Size { get; }
 
-        public Field GetField(int x, int y)
-        {
-            return Fields[x * Size + y];
-        }
+    public Field GetField(int x, int y)
+    {
+        return Fields[x * Size + y];
     }
 }

@@ -1,11 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿namespace Battleships.Exceptions;
 
-namespace Battleships.Exceptions
+public class InvalidInputException : Exception
 {
-    public class InvalidInputException : Exception
-    {
-        public InvalidInputException()
-        {
-        }
-    }
 }

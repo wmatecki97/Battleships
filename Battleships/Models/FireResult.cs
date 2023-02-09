@@ -1,10 +1,9 @@
-﻿namespace Battleships.Models
+﻿namespace Battleships.Models;
+
+public enum EShootResult
 {
-    public enum EShootResult
-    {
-        Hit,
-        Miss,
-        HitAndSunk,
-        AlreadyHit
-    }
+    Hit,
+    Miss,
+    HitAndSunk,
+    AlreadyHit
 }

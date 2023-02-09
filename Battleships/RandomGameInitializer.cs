@@ -1,85 +1,83 @@
 ﻿using Battleships.Interfaces;
 using Battleships.Models.Ships;
 
-namespace Battleships
-{
-    public class RandomGameInitializer : IGameInitializer
-    {
-        public void Initialize(IGame game, IEnumerable<Ship>? ships = null)
-        {
-            ships ??= new Ship[]
-            {
-                new Battleship(),
-                new Destroyer(),
-                new Destroyer()
-            };
+namespace Battleships;
 
-            foreach(var ship in ships)
+public class RandomGameInitializer : IGameInitializer
+{
+    public void Initialize(IGame game, IEnumerable<Ship>? ships = null)
+    {
+        ships ??= new Ship[]
+        {
+            new Battleship(),
+            new Destroyer(),
+            new Destroyer()
+        };
+
+        foreach (var ship in ships)
+        {
+            PlaceShipOnBoard(ship, game);
+        }
+    }
+
+    private void PlaceShipOnBoard(Ship ship, IGame game)
+    {
+        game.Ships.Add(ship);
+        bool isFieldFree = false;
+        var rand = new Random();
+
+        while (!isFieldFree)
+        {
+            var isShipPlacedHorizontally = rand.Next(0, 1) == 0;
+            int startX, startY, endX, endY;
+
+            if (isShipPlacedHorizontally)
             {
-                PlaceShipOnBoard(ship, game);
+                GetPossibleShipCoordinates(out startX, out startY, out endX, out endY);
+            }
+            else
+            {
+                GetPossibleShipCoordinates(out startY, out startX, out endY, out endX);
+            }
+
+            var xValues = GetNumbersInRange(startX, endX);
+            var yValues = GetNumbersInRange(startY, endY);
+            var fieldsToCheck = from x in xValues
+                from y in yValues
+                select new { X = x, Y = y };
+
+            var consideredFields = fieldsToCheck.Select(f => game.Board.GetField(f.X, f.Y)).ToList();
+            isFieldFree = consideredFields.All(f => f.Ship is null);
+
+            if (isFieldFree)
+            {
+                consideredFields.ForEach(f =>
+                {
+                    f.Ship = ship;
+                    ship.Fields.Add(f);
+                });
             }
         }
 
-        private void PlaceShipOnBoard(Ship ship, IGame game)
+        IEnumerable<int> GetNumbersInRange(int start, int end)
         {
-            game.Ships.Add(ship);
-            bool isFieldFree = false;
-            var rand = new Random();
-
-            while (!isFieldFree)
+            if (start == end)
             {
-                var isShipPlacedHorizontally = rand.Next(0, 1) == 0;
-                int startX, startY, endX, endY;
-
-                if (isShipPlacedHorizontally)
-                {
-                    GetPossibleShipCoordinates(out startX, out startY, out endX, out endY);
-                }
-                else
-                {
-                    GetPossibleShipCoordinates(out startY, out startX, out endY, out endX);
-                }
-
-                var xValues = GetNumbersInRange(startX, endX);
-                var yValues = GetNumbersInRange(startY, endY);
-                var fieldsToCheck = from x in xValues
-                                    from y in yValues
-                                    select new { X = x, Y = y };
-
-                var consideredFields = fieldsToCheck.Select(f => game.Board.GetField(f.X, f.Y)).ToList();
-                isFieldFree = consideredFields.All(f => f.Ship is null);
-
-                if (isFieldFree)
-                {
-                    consideredFields.ForEach(f =>
-                    {
-                        f.Ship = ship;
-                        ship.Fields.Add(f);
-                    });
-                }
-
+                yield return start;
             }
 
-            IEnumerable<int> GetNumbersInRange(int start, int end)
+            foreach (var number in Enumerable.Range(start, end - start))
             {
-                if (start == end)
-                {
-                    yield return start;
-                }
-
-                foreach (var number in Enumerable.Range(start, end - start))
-                {
-                    yield return number;
-                }
+                yield return number;
             }
+        }
 
-            void GetPossibleShipCoordinates(out int start1, out int start2, out int end1, out int end2)
-            {
-                start1 = rand.Next(0, game.Board.Size - ship.Length);
-                start2 = rand.Next(0, game.Board.Size - 1);
-                end1 = start1 + ship.Length;
-                end2 = start2;
-            }
+        void GetPossibleShipCoordinates(out int start1, out int start2, out int end1, out int end2)
+        {
+            start1 = rand.Next(0, game.Board.Size - ship.Length);
+            start2 = rand.Next(0, game.Board.Size - 1);
+            end1 = start1 + ship.Length;
+            end2 = start2;
         }
     }
 }

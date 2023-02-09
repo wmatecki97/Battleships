@@ -1,64 +1,74 @@
 ﻿using Battleships.Exceptions;
 using Battleships.Interfaces;
+using Battleships.Models;
 
-namespace Battleships
+namespace Battleships;
+
+public class Ui
 {
-    public class UI
+    private readonly IGame _game;
+    private readonly IInputTranslator _inputTranslator;
+    private readonly IMessenger _messenger;
+    private bool _isRunning = true;
+
+    public Ui(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
     {
-        private readonly IGame game;
-        private readonly IMessenger messager;
-        private readonly IInputTranslator inputTranslator;
-        private bool _isRunning = true;
+        _game = game;
+        _messenger = messenger;
+        _inputTranslator = inputTranslator;
+    }
 
-        public UI(IGame game, IMessenger messager, IInputTranslator inputTranslator)
+    public void Run()
+    {
+        _messenger.Write("Please type the field coordinates you want to shoot e.g. A1");
+        while (_isRunning)
         {
-            this.game = game;
-            this.messager = messager;
-            this.inputTranslator = inputTranslator;
+            ProcessNextRound();
         }
+    }
 
-        public void Run()
+    public void ProcessNextRound()
+    {
+        try
         {
-            messager.Write("Please type the field coordinates you want to shoot e.g. A1");
-            while (_isRunning)
+            string input = _messenger.GetInput();
+            (int x, int y) = _inputTranslator.GetCoordinatesFromInput(input);
+            Shoot(x, y);
+
+            var isGameWon = _game.IsGameWon();
+            if (isGameWon)
             {
-                ProcessNextRound();
+                _messenger.Write("You won!");
+                _isRunning = false;
             }
         }
-
-        public void ProcessNextRound()
+        catch (InvalidInputException)
         {
-            try
-            {
-                string input = messager.GetInput();
-                (int x, int y) = inputTranslator.GetCoordinatesFromInput(input);
-                Shoot(x, y);
+            _messenger.Write(
+                $"Field coordinates should be a character A-{(char)('A' + _game.Board.Size - 1)} followed by a number 0-{_game.Board.Size - 1} e.g. a1");
+        }
+    }
 
-                var isGameWon = game.IsGameWon();
-                if (isGameWon)
-                {
-                    messager.Write($"You won!");
-                    _isRunning = false;
-                }
-            }
-            catch (InvalidInputException)
-            {
-                messager.Write($"Field coordinates should be a character A-{(char)('A'+game.Board.Size-1)} followed by a number 0-{game.Board.Size - 1} e.g. a1");
-            }
+    public virtual void Shoot(int x, int y)
+    {
+        var isHit = _game.Shoot(x, y);
+        string message = string.Empty;
+        switch (isHit)
+        {
+            case EShootResult.Hit:
+                message = "Hit!";
+                break;
+            case EShootResult.Miss:
+                message = "Miss...";
+                break;
+            case EShootResult.HitAndSunk:
+                message = "Hit and sunk";
+                break;
+            case EShootResult.AlreadyHit:
+                message = "Already hit";
+                break;
         }
 
-        public virtual void Shoot(int x, int y)
-        {
-            var isHit = game.Shoot(x, y);
-            string message = string.Empty;
-            switch (isHit)
-            {
-                case Models.EShootResult.Hit: message = "Hit!"; break;
-                case Models.EShootResult.Miss: message = "Miss..."; break;
-                case Models.EShootResult.HitAndSunk: message = "Hit and sunk"; break;
-                case Models.EShootResult.AlreadyHit: message = "Already hit"; break;
-            }
-            messager.Write(message);
-        }
+        _messenger.Write(message);
     }
 }

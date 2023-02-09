@@ -1,13 +1,12 @@
 ﻿using Battleships.Models;
 
-namespace Battleships.Interfaces
+namespace Battleships.Interfaces;
+
+public interface IBoard
 {
-    public interface IBoard
-    {
-        int Size { get; }
+    int Size { get; }
 
-        Field[] Fields { get; }
+    Field[] Fields { get; }
 
-        Field GetField(int x, int y);
-    }
+    Field GetField(int x, int y);
 }
