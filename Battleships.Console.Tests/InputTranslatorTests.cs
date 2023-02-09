@@ -12,9 +12,9 @@ internal class InputTranslatorTests
     public void GetCoordinatesFromInput_ValidInput_ReturnsParsedCoordinates(string input, int x, int y)
     {
         var translator = new InputTranslator();
-        var (resX, resY) = translator.GetCoordinatesFromInput(input);
-        resX.Should().Be(x);
-        resY.Should().Be(y);
+        translator.TryGetCoordinatesFromInput(input, out var coordinates);
+        coordinates.X.Should().Be(x);
+        coordinates.Y.Should().Be(y);
     }
 
     [Test]
@@ -24,9 +24,10 @@ internal class InputTranslatorTests
     [TestCase("A11")]
     [TestCase("AB1")]
     [TestCase("Z1")]
-    public void GetCoordinatesFromInput_InvalidInput_ThrowsInvalidInputException(string input)
+    public void GetCoordinatesFromInput_InvalidInput_ReturnsFalse(string input)
     {
         var translator = new InputTranslator();
-        Assert.Throws<InvalidInputException>(() => translator.GetCoordinatesFromInput(input));
+        var result = translator.TryGetCoordinatesFromInput(input, out _);
+        result.Should().BeFalse();
     }
 }

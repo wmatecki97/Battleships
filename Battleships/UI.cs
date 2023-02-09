@@ -1,24 +1,23 @@
-﻿using Battleships.Console.Exceptions;
-using Battleships.Core.Interfaces;
+﻿using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 
 namespace Battleships.Console;
 
-public sealed class Ui
+internal sealed class Ui
 {
     private readonly IGame _game;
     private readonly IInputTranslator _inputTranslator;
     private readonly IMessenger _messenger;
     private bool _isRunning = true;
 
-    public Ui(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
+    internal Ui(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
     {
         _game = game;
         _messenger = messenger;
         _inputTranslator = inputTranslator;
     }
 
-    public void Run()
+    internal void Run()
     {
         _messenger.Write("Please type the field coordinates you want to shoot e.g. A1");
         while (_isRunning)
@@ -27,14 +26,13 @@ public sealed class Ui
         }
     }
 
-    public void ProcessNextRound()
+    internal void ProcessNextRound()
     {
-        try
+        var input = _messenger.GetInput();
+        if (_inputTranslator.TryGetCoordinatesFromInput(input, out var coordinates))
         {
-            string input = _messenger.GetInput();
-            (int x, int y) = _inputTranslator.GetCoordinatesFromInput(input);
-            Shoot(x, y);
-
+            Shoot(coordinates.X, coordinates.Y);
+            //todo check game won in shoot status response
             var isGameWon = _game.IsGameWon();
             if (isGameWon)
             {
@@ -42,14 +40,14 @@ public sealed class Ui
                 _isRunning = false;
             }
         }
-        catch (InvalidInputException)
+        else
         {
             _messenger.Write(
                 $"Field coordinates should be a character A-{(char)('A' + _game.Board.Size - 1)} followed by a number 0-{_game.Board.Size - 1} e.g. a1");
         }
     }
 
-    public void Shoot(int x, int y)
+    internal void Shoot(int x, int y)
     {
         var isHit = _game.Shoot(x, y);
         string message = string.Empty;

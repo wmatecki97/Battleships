@@ -1,23 +1,29 @@
 ﻿using System.Text.RegularExpressions;
-using Battleships.Console.Exceptions;
 using Battleships.Core.Interfaces;
 
 namespace Battleships.Console;
 
-public sealed class InputTranslator : IInputTranslator
+internal sealed class InputTranslator : IInputTranslator
 {
-    public (int, int) GetCoordinatesFromInput(string input)
+    public bool TryGetCoordinatesFromInput(string input, out Coordinates coordinates)
     {
+        coordinates = new Coordinates();
+
+        if (!IsInputValid(input))
+        {
+            return false;
+        }
         input = input.ToUpper();
-        ValidateInputThrowException(input);
-        var x = input.First() - 'A';
-        var y = int.Parse(input.Last().ToString());
-        return (x, y);
+        coordinates.X = input.First() - 'A';
+        coordinates.Y = int.Parse(input.Last().ToString());
+
+        return true;
     }
 
-    private void ValidateInputThrowException(string input)
+    private bool IsInputValid(string input)
     {
-        if (input.Length != 2 || !Regex.IsMatch(input, "[A-J][0-9]"))
-            throw new InvalidInputException();
+        return !string.IsNullOrEmpty(input)
+            && input.Length == 2 
+            && Regex.IsMatch(input, "[A-J a-j][0-9]");
     }
 }
