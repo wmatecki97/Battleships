@@ -17,7 +17,7 @@ internal class GameTests
         int x = 1, y = 1;
         const int shipLength = 5;
 
-        var ship = new Ship(shipLength);
+        var ship = new Destroyer();
         var field = new Field
         {
             Ship = ship
@@ -41,8 +41,7 @@ internal class GameTests
     {
         //Arrange
         int x = 1, y = 1;
-        const int shipLength = 1;
-        var ship = new Ship(shipLength);
+        var ship = new Destroyer();
         var field = new Field
         {
             Ship = ship
@@ -64,10 +63,9 @@ internal class GameTests
     {
         //Arrange
         int x = 1, y = 1;
-        const int shipLength = 1;
         var field = new Field
         {
-            Ship = new Ship(shipLength),
+            Ship = new Destroyer(),
             IsHit = true
         };
         var boardMock = new Mock<IBoard>();
@@ -107,7 +105,7 @@ internal class GameTests
         int x = 1, y = 1;
         var field = new Field
         {
-            Ship = new Ship(1)
+            Ship = new Destroyer()
         };
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
@@ -126,7 +124,7 @@ internal class GameTests
     {
         //Arrange
         int x = 1, y = 1;
-        Ship ship = new Ship(1);
+        Ship ship = new Destroyer();
         var field = new Field
         {
             Ship = ship
@@ -168,7 +166,7 @@ internal class GameTests
 
         static Ship GetShipWithAllFieldsHit()
         {
-            var ship = new Ship(1);
+            var ship = new Destroyer();
             ship.Fields.Add(
                 new Field
                 {
@@ -200,7 +198,7 @@ internal class GameTests
 
         static Ship GetShipWithNoFieldsHit()
         {
-            var ship = new Ship(1);
+            var ship = new Destroyer();
             ship.Fields.Add(new Field());
 
             return ship;
@@ -227,7 +225,7 @@ internal class GameTests
 
         static Ship GetShipWithNoFieldsHit()
         {
-            var ship = new Ship(1);
+            var ship = new Destroyer();
             ship.Fields.Add(new Field());
 
             return ship;
