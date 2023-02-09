@@ -1,16 +1,16 @@
-﻿using Battleships.Interfaces;
+﻿using Battleships.Core.Interfaces;
 
-namespace Battleships;
+namespace Battleships.Console;
 
 internal class ConsoleMessenger : IMessenger
 {
     public string GetInput()
     {
-        return Console.ReadLine() ?? string.Empty;
+        return System.Console.ReadLine() ?? string.Empty;
     }
 
     public void Write(string message)
     {
-        Console.WriteLine(message);
+        System.Console.WriteLine(message);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Battleships;
+﻿using Battleships.Console;
+using Battleships.Core;
 
 var game = new Game();
 

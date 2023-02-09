@@ -1,8 +1,8 @@
-﻿using Battleships.Exceptions;
-using Battleships.Interfaces;
-using Battleships.Models;
+﻿using Battleships.Console.Exceptions;
+using Battleships.Core.Interfaces;
+using Battleships.Core.Models;
 
-namespace Battleships;
+namespace Battleships.Console;
 
 public sealed class Ui
 {

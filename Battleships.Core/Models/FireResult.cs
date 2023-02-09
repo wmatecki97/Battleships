@@ -1,4 +1,4 @@
-﻿namespace Battleships.Models;
+﻿namespace Battleships.Core.Models;
 
 public enum EShootResult
 {

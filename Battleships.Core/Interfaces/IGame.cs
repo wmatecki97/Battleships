@@ -1,7 +1,8 @@
-﻿using Battleships.Models;
-using Battleships.Models.Ships;
+﻿using System.Collections.Generic;
+using Battleships.Core.Models;
+using Battleships.Core.Models.Ships;
 
-namespace Battleships.Interfaces;
+namespace Battleships.Core.Interfaces;
 
 public interface IGame
 {

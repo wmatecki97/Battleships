@@ -1,8 +1,10 @@
-﻿using Battleships.Interfaces;
-using Battleships.Models;
-using Battleships.Models.Ships;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Battleships.Core.Interfaces;
+using Battleships.Core.Models;
+using Battleships.Core.Models.Ships;
 
-namespace Battleships;
+namespace Battleships.Core;
 
 public sealed class Game : IGame
 {

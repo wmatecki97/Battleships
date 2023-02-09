@@ -1,4 +1,4 @@
-﻿namespace Battleships.Interfaces;
+﻿namespace Battleships.Core.Interfaces;
 
 public interface IMessenger
 {

@@ -1,6 +1,7 @@
-﻿using Battleships.Interfaces;
+﻿using System.Linq;
+using Battleships.Core.Interfaces;
 
-namespace Battleships.Models;
+namespace Battleships.Core.Models;
 
 public class Board : IBoard
 {

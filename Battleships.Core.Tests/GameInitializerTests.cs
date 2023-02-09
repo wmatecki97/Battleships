@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-namespace Battleships.Tests;
+namespace Battleships.Core.Tests;
 
 internal class GameInitializerTests
 {

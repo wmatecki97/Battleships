@@ -1,6 +1,6 @@
-﻿using Battleships.Models.Ships;
+﻿using Battleships.Core.Models.Ships;
 
-namespace Battleships.Models;
+namespace Battleships.Core.Models;
 
 public class Field
 {

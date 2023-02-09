@@ -1,10 +1,10 @@
-﻿using Battleships.Interfaces;
-using Battleships.Models;
-using Battleships.Models.Ships;
+﻿using Battleships.Core.Interfaces;
+using Battleships.Core.Models;
+using Battleships.Core.Models.Ships;
 using FluentAssertions;
 using Moq;
 
-namespace Battleships.Tests;
+namespace Battleships.Core.Tests;
 
 internal class RandomGameInitializerTests
 {

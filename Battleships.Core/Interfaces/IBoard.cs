@@ -1,6 +1,6 @@
-﻿using Battleships.Models;
+﻿using Battleships.Core.Models;
 
-namespace Battleships.Interfaces;
+namespace Battleships.Core.Interfaces;
 
 public interface IBoard
 {

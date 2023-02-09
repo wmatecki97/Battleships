@@ -1,9 +1,9 @@
-using Battleships.Exceptions;
-using Battleships.Interfaces;
-using Battleships.Models;
+using Battleships.Console.Exceptions;
+using Battleships.Core.Interfaces;
+using Battleships.Core.Models;
 using Moq;
 
-namespace Battleships.Tests;
+namespace Battleships.Console.Tests;
 
 [TestFixture]
 public class UiTests

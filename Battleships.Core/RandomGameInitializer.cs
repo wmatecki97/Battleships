@@ -1,7 +1,10 @@
-﻿using Battleships.Interfaces;
-using Battleships.Models.Ships;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Battleships.Core.Interfaces;
+using Battleships.Core.Models.Ships;
 
-namespace Battleships;
+namespace Battleships.Core;
 
 public class RandomGameInitializer : IGameInitializer
 {
