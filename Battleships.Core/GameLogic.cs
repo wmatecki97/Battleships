@@ -2,17 +2,16 @@
 using System.Linq;
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
+using Battleships.Core.Models.Boards;
 
 namespace Battleships.Core;
 
-public sealed class Game : IGame
+public sealed class GameLogic : IGame
 {
-    public Game(int boardSize = 10, IBoard? board = null, IGameInitializer? initializer = null)
+    public GameLogic(IBoard board)
     {
-        Board = board ?? new Board(boardSize);
+        Board = board;
         Ships = new List<IShip>();
-        initializer ??= new RandomGameInitializer();
-        initializer.Initialize(this);
     }
 
     public IBoard Board { get; }

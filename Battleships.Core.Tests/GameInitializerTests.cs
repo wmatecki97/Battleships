@@ -7,7 +7,7 @@ internal class GameInitializerTests
     [Test]
     public void Init_RandomShipPlacement_AllShipsHaveCorrectNoOfFieldsAssigned()
     {
-        var game = new Game();
+        var game = new GameLogic();
 
         game.Ships.ForEach(s => s.Fields.Count.Should().Be(s.Length));
         int noOfFieldsWithShips = game.Board.Fields.Count(f => f.Ship is not null);

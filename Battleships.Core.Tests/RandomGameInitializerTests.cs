@@ -18,7 +18,7 @@ internal class RandomGameInitializerTests
         boardMock.Setup(b => b.Size).Returns(10);
         boardMock.Setup(b => b.GetField(It.IsAny<int>(), It.IsAny<int>())).Returns(() => new Field());
         gameMock.Setup(g => g.Board).Returns(boardMock.Object);
-        var initializer = new RandomGameInitializer();
+        var initializer = new DefaultBoard();
 
         initializer.Initialize(gameMock.Object);
 
