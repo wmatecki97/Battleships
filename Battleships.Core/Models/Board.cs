@@ -3,7 +3,7 @@ using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models;
 
-public class Board : IBoard
+public sealed class Board : IBoard
 {
     public Board(int size)
     {

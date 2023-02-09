@@ -6,6 +6,7 @@ using Battleships.Core.Models.Ships;
 
 namespace Battleships.Core;
 
+//todo factory
 public class RandomGameInitializer : IGameInitializer
 {
     public void Initialize(IGame game, IEnumerable<Ship>? ships = null)
@@ -23,7 +24,7 @@ public class RandomGameInitializer : IGameInitializer
         }
     }
 
-    private void PlaceShipOnBoard(Ship ship, IGame game)
+    private static void PlaceShipOnBoard(Ship ship, IGame game)
     {
         game.Ships.Add(ship);
         bool isFieldFree = false;

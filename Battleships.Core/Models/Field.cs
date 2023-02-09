@@ -2,7 +2,7 @@
 
 namespace Battleships.Core.Models;
 
-public class Field
+public sealed class Field
 {
     public Ship? Ship { get; set; }
 
