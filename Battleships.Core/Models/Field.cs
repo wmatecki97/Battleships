@@ -1,10 +1,10 @@
-﻿using Battleships.Core.Models.Ships;
+﻿using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models;
 
 public sealed class Field
 {
-    public Ship? Ship { get; set; }
+    public IShip? Ship { get; set; }
 
     public bool IsHit { get; set; }
 }

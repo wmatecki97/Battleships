@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Battleships.Core.Models;
-using Battleships.Core.Models.Ships;
 
 namespace Battleships.Core.Interfaces;
 
 public interface IGame
 {
-    List<Ship> Ships { get; }
+    List<IShip> Ships { get; }
 
     IBoard Board { get; }
 

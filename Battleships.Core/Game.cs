@@ -2,7 +2,6 @@
 using System.Linq;
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
-using Battleships.Core.Models.Ships;
 
 namespace Battleships.Core;
 
@@ -11,13 +10,13 @@ public sealed class Game : IGame
     public Game(int boardSize = 10, IBoard? board = null, IGameInitializer? initializer = null)
     {
         Board = board ?? new Board(boardSize);
-        Ships = new List<Ship>();
+        Ships = new List<IShip>();
         initializer ??= new RandomGameInitializer();
         initializer.Initialize(this);
     }
 
     public IBoard Board { get; }
-    public List<Ship> Ships { get; }
+    public List<IShip> Ships { get; }
 
     public EShootResult Shoot(int x, int y)
     {

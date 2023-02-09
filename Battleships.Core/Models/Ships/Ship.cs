@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models.Ships;
 
-public abstract class Ship
+public abstract class Ship : IShip
 {
     protected Ship()
     {

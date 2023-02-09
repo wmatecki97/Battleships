@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Battleships.Core.Interfaces;
 
 namespace Battleships.Console;
 

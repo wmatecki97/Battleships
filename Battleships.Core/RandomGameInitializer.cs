@@ -9,7 +9,7 @@ namespace Battleships.Core;
 //todo factory
 public class RandomGameInitializer : IGameInitializer
 {
-    public void Initialize(IGame game, IEnumerable<Ship>? ships = null)
+    public void Initialize(IGame game, IEnumerable<IShip>? ships = null)
     {
         ships ??= new Ship[]
         {
@@ -24,7 +24,7 @@ public class RandomGameInitializer : IGameInitializer
         }
     }
 
-    private static void PlaceShipOnBoard(Ship ship, IGame game)
+    private static void PlaceShipOnBoard(IShip ship, IGame game)
     {
         game.Ships.Add(ship);
         bool isFieldFree = false;

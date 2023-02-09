@@ -1,5 +1,4 @@
-﻿using Battleships.Console.Exceptions;
-using FluentAssertions;
+﻿using FluentAssertions;
 
 namespace Battleships.Console.Tests;
 

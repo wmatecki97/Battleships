@@ -12,7 +12,7 @@ internal class RandomGameInitializerTests
     public void Init_DefaultInitialization_AddsTwoDestroyersAndBattleshipToTheBoardByDefault()
     {
         var gameMock = new Mock<IGame>();
-        var ships = new List<Ship>();
+        var ships = new List<IShip>();
         gameMock.Setup(g => g.Ships).Returns(ships);
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.Size).Returns(10);
