@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Battleships.Core.Models;
+﻿using Battleships.Core.Models;
 
 namespace Battleships.Core.Interfaces;
 

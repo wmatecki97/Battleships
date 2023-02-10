@@ -37,8 +37,8 @@ public class UiTests
 
         //Assert
         gameMock.Verify(l => l.Shoot(
-                    It.Is<int>(x => x == xCoordinate),
-                    It.Is<int>(y => y == yCoordinate)),
+                It.Is<int>(x => x == xCoordinate),
+                It.Is<int>(y => y == yCoordinate)),
             Times.Once);
     }
 

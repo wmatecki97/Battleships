@@ -1,8 +1,7 @@
-﻿namespace Battleships.Console
+﻿namespace Battleships.Console;
+
+public class Coordinates
 {
-    public class Coordinates
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-    }
+    public int X { get; set; }
+    public int Y { get; set; }
 }

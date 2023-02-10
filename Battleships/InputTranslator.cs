@@ -13,6 +13,7 @@ internal sealed class InputTranslator : IInputTranslator
         {
             return false;
         }
+
         input = input.ToUpper();
         coordinates.X = input.First() - 'A';
         coordinates.Y = int.Parse(input.Last().ToString());
@@ -23,7 +24,7 @@ internal sealed class InputTranslator : IInputTranslator
     private bool IsInputValid(string input)
     {
         return !string.IsNullOrEmpty(input)
-            && input.Length == 2 
-            && Regex.IsMatch(input, "[A-J a-j][0-9]");
+               && input.Length == 2
+               && Regex.IsMatch(input, "[A-J a-j][0-9]");
     }
 }

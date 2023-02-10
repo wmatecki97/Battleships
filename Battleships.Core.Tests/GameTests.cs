@@ -10,6 +10,7 @@ namespace Battleships.Core.Tests;
 internal class GameTests
 {
     #region ShootTests
+
     //todo builder
     [Test]
     public void Shoot_FieldWithShipHighHp_ReturnsHit()
@@ -150,7 +151,7 @@ internal class GameTests
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(x => x.Ships).Returns(new[] { ship1, ship2 });
         var game = new Game(boardMock.Object);
-        
+
         //Act
         var isGameWon = game.IsWon();
 

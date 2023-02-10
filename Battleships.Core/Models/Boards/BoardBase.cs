@@ -12,7 +12,7 @@ public abstract class BoardBase : IBoard
         Ships = ships;
         Size = size;
         int fieldsCount = size * size;
-        Fields = Enumerable.Range(0,fieldsCount).Select(_ => new Field()).ToArray();
+        Fields = Enumerable.Range(0, fieldsCount).Select(_ => new Field()).ToArray();
     }
 
     public Field[] Fields { get; }
