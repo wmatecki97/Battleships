@@ -1,6 +1,8 @@
-﻿namespace Battleships.Interfaces;
+﻿using Battleships.Console.Models;
+
+namespace Battleships.Console.Interfaces;
 
 public interface IInputTranslator
 {
-    (int, int) GetCoordinatesFromInput(string input);
+    bool TryGetCoordinatesFromInput(string input, out Coordinates coordinates);
 }
