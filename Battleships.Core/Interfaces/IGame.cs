@@ -9,5 +9,5 @@ public interface IGame
 
     EShootResult Shoot(int x, int y);
 
-    bool IsGameWon();
+    bool IsWon();
 }

@@ -152,7 +152,7 @@ internal class GameTests
         var game = new Game(boardMock.Object);
         
         //Act
-        var isGameWon = game.IsGameWon();
+        var isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeTrue();
@@ -183,7 +183,7 @@ internal class GameTests
             .Build();
 
         //Act
-        var isGameWon = game.IsGameWon();
+        var isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeFalse();
@@ -201,7 +201,7 @@ internal class GameTests
             .Build();
 
         //Act
-        var isGameWon = game.IsGameWon();
+        var isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeFalse();

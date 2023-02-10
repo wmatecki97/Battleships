@@ -33,8 +33,7 @@ public sealed class Game : IGame
         return EShootResult.Miss;
     }
 
-    //todo include in shoot
-    public bool IsGameWon()
+    public bool IsWon()
     {
         return Board.Ships.All(s => s.Fields.All(f => f.IsHit));
     }

@@ -1,16 +1,17 @@
-﻿using Battleships.Core.Interfaces;
+﻿using Battleships.Console.Interfaces;
+using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 
 namespace Battleships.Console;
 
-internal sealed class Ui
+internal sealed class TextUi
 {
     private readonly IGame _game;
     private readonly IInputTranslator _inputTranslator;
     private readonly IMessenger _messenger;
     private bool _isRunning = true;
 
-    internal Ui(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
+    internal TextUi(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
     {
         _game = game;
         _messenger = messenger;
@@ -31,10 +32,11 @@ internal sealed class Ui
         var input = _messenger.GetInput();
         if (_inputTranslator.TryGetCoordinatesFromInput(input, out var coordinates))
         {
-            Shoot(coordinates.X, coordinates.Y);
-            //todo check game won in shoot status response
-            var isGameWon = _game.IsGameWon();
-            if (isGameWon)
+            var shootStatus = _game.Shoot(coordinates.X, coordinates.Y);
+            var message = GetHitResultMessage(shootStatus);
+            _messenger.Write(message);
+
+            if (shootStatus == EShootResult.HitAndSunk && _game.IsWon())
             {
                 _messenger.Write("You won!");
                 _isRunning = false;
@@ -42,31 +44,21 @@ internal sealed class Ui
         }
         else
         {
+            //todo test
             _messenger.Write(
                 $"Field coordinates should be a character A-{(char)('A' + _game.Board.Size - 1)} followed by a number 0-{_game.Board.Size - 1} e.g. a1");
         }
     }
 
-    internal void Shoot(int x, int y)
+    private string GetHitResultMessage(EShootResult status)
     {
-        var isHit = _game.Shoot(x, y);
-        string message = string.Empty;
-        switch (isHit)
+        return status switch
         {
-            case EShootResult.Hit:
-                message = "Hit!";
-                break;
-            case EShootResult.Miss:
-                message = "Miss...";
-                break;
-            case EShootResult.HitAndSunk:
-                message = "Hit and sunk";
-                break;
-            case EShootResult.AlreadyHit:
-                message = "Already hit";
-                break;
-        }
-
-        _messenger.Write(message);
+            EShootResult.Hit => "Hit!",
+            EShootResult.Miss => "Miss...",
+            EShootResult.HitAndSunk => "Hit and sunk",
+            EShootResult.AlreadyHit => "Already hit",
+            _ => string.Empty
+        };
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Battleships.Console;
+﻿namespace Battleships.Console.Interfaces;
 
 public interface IInputTranslator
 {
