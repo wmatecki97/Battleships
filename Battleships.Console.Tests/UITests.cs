@@ -1,4 +1,3 @@
-using Battleships.Console.Interfaces;
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 using Moq;
@@ -9,31 +8,24 @@ namespace Battleships.Console.Tests;
 public class UiTests
 {
     [Test]
-    public void ProcessNextRound_ValidField_RunsGameLogic()
+    public void ProcessNextRound_ValidInput_ShootAtTheFieldGiven()
     {
         //Arrange
-        var gameMock = new Mock<IGame>();
-        var messengerMock = new Mock<IMessenger>();
-        const string validField = "B3";
         const int xCoordinate = 1;
         const int yCoordinate = 3;
-        messengerMock.Setup(m => m.GetInput()).Returns(validField);
-
-        var inputTranslatorMock = new Mock<IInputTranslator>();
-        var coordinates = new Coordinates
-        {
-            X = xCoordinate,
-            Y = yCoordinate
-        };
-
         const bool isInputValid = true;
-        inputTranslatorMock.Setup(t => t.TryGetCoordinatesFromInput(It.IsAny<string>(), out coordinates))
-            .Returns(isInputValid);
 
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslatorMock.Object);
+        var gameMock = new Mock<IGame>();
+        var messengerMock = new Mock<IMessenger>();
+
+        var sut = new UiBuilder()
+            .WithMessenger(messengerMock.Object)
+            .WithMockedInput(isInputValid, xCoordinate, yCoordinate)
+            .WithGame(gameMock.Object)
+            .Build();
 
         //Act
-        ui.ProcessNextRound();
+        sut.ProcessNextRound();
 
         //Assert
         gameMock.Verify(l => l.Shoot(
@@ -43,148 +35,135 @@ public class UiTests
     }
 
     [Test]
-    public void ProcessNextRound_InvalidField_DontRunGameLogic()
+    public void ProcessNextRound_InvalidInput_DontShoot()
     {
         //Arrange
-        const string input = "A0";
+        const bool isInputValid = false;
+
         var gameMock = new Mock<IGame>();
         gameMock.Setup(l => l.Board).Returns(new Mock<IBoard>().Object);
-        var messengerMock = new Mock<IMessenger>();
-        messengerMock.Setup(m => m.GetInput()).Returns(input);
 
-        var coordinates = new Coordinates();
-        var inputTranslator = new Mock<IInputTranslator>();
-        const bool isInputValid = false;
-        inputTranslator.Setup(t => t.TryGetCoordinatesFromInput(It.IsAny<string>(), out coordinates))
-            .Returns(isInputValid);
-
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslator.Object);
+        var sut = new UiBuilder()
+            .WithMockedInput(isInputValid)
+            .WithBoard(1)
+            .Build();
 
         //Act
-        ui.ProcessNextRound();
+        sut.ProcessNextRound();
 
         //Assert
         gameMock.Verify(g => g.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
     }
 
     [Test]
-    public void ProcessNextRound_InvalidField_ReturnsInvalidInputMessage()
+    public void ProcessNextRound_InvalidInput_WriteInvalidInputMessage()
     {
         //Arrange
-        const string input = "A0";
-        var gameMock = new Mock<IGame>();
-        gameMock.Setup(l => l.Board).Returns(new Mock<IBoard>().Object);
-        var messengerMock = new Mock<IMessenger>();
-        messengerMock.Setup(m => m.GetInput()).Returns(input);
-
-        var coordinates = new Coordinates();
-        var inputTranslator = new Mock<IInputTranslator>();
         const bool isInputValid = false;
-        inputTranslator.Setup(t => t.TryGetCoordinatesFromInput(It.IsAny<string>(), out coordinates))
-            .Returns(isInputValid);
 
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslator.Object);
+        var messengerMock = new Mock<IMessenger>();
+
+        var sut = new UiBuilder()
+            .WithBoard(2)
+            .WithMockedInput(isInputValid)
+            .WithMessenger(messengerMock.Object)
+            .Build();
+
 
         //Act
-        ui.ProcessNextRound();
+        sut.ProcessNextRound();
 
         //Assert
-        gameMock.Verify(g => g.Shoot(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+        messengerMock.Verify(m =>
+            m.Write("Field coordinates should be a character A-B followed by a number 0-1 e.g. a1"));
     }
 
     [Test]
     public void ProcessNextRound_HitAdWon_WritesHitAndSunkAndWonMessages()
     {
         //Arrange
+        const bool isInputValid = true;
+        const bool isGameWon = true;
+
         var gameMock = new Mock<IGame>();
         gameMock.Setup(game => game.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.HitAndSunk);
-        gameMock.Setup(game => game.IsWon()).Returns(true);
-
+        gameMock.Setup(game => game.IsWon()).Returns(isGameWon);
         var messengerMock = new Mock<IMessenger>();
-        messengerMock.Setup(m => m.Write(It.IsAny<string>()));
 
-        //todo builder
-        var inputTranslator = new Mock<IInputTranslator>();
+        var sut = new UiBuilder()
+            .WithMockedInput(isInputValid)
+            .WithMockedNextShootResult(EShootResult.HitAndSunk)
+            .WithMessenger(messengerMock.Object)
+            .WithGame(gameMock.Object)
+            .Build();
+
+        //Act
+        sut.ProcessNextRound();
+
+        //Assert
+        messengerMock.Verify(m => m.Write("Hit and sunk"), Times.Once());
+        messengerMock.Verify(m => m.Write("You won!"), Times.Once());
+    }
+
+    [Test]
+    public void ProcessNextRound_Hit_WritesHitMessage()
+    {
+        //Arrange
         const bool isInputValid = true;
-        var coordinates = new Coordinates();
-        inputTranslator.Setup(i => i.TryGetCoordinatesFromInput(It.IsAny<string>(), out coordinates))
-            .Returns(isInputValid);
+        var messengerMock = new Mock<IMessenger>();
 
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslator.Object);
+
+        var sut = new UiBuilder()
+            .WithMockedInput(isInputValid)
+            .WithMockedNextShootResult(EShootResult.Hit)
+            .WithMessenger(messengerMock.Object)
+            .Build();
 
         //Act
-        ui.ProcessNextRound();
+        sut.ProcessNextRound();
 
         //Assert
-        messengerMock.Verify(m => m.Write(It.IsRegex("Hit and sunk")), Times.Once());
-        messengerMock.Verify(m => m.Write(It.IsRegex("You won!")), Times.Once());
+        messengerMock.Verify(m => m.Write("Hit!"), Times.Once());
     }
 
     [Test]
-    public void Shoot_Hit_WritesHitMessage()
+    public void ProcessNextRound_Miss_WritesMissMessage()
     {
         //Arrange
-        var gameMock = new Mock<IGame>();
-        gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Hit);
-
+        const bool isInputValid = true;
         var messengerMock = new Mock<IMessenger>();
-        var inputTranslator = GetInputTranslatorMock(true);
 
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslator.Object);
+
+        var sut = new UiBuilder()
+            .WithMockedInput(isInputValid)
+            .WithMockedNextShootResult(EShootResult.Miss)
+            .WithMessenger(messengerMock.Object)
+            .Build();
 
         //Act
-        ui.ProcessNextRound();
+        sut.ProcessNextRound();
 
         //Assert
-        messengerMock.Verify(m => m.Write(It.IsRegex("Hit!")), Times.Once());
+        messengerMock.Verify(m => m.Write("Miss..."), Times.Once());
     }
 
     [Test]
-    public void Shoot_Miss_WritesMissMessage()
+    public void ProcessNextRound_AlreadyHitField_WritesAlreadyHitMessage()
     {
         //Arrange
-        var gameMock = new Mock<IGame>();
-        gameMock.Setup(l => l.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.Miss);
-
         var messengerMock = new Mock<IMessenger>();
-        var inputTranslator = GetInputTranslatorMock(true);
+        const bool isInputValid = true;
 
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslator.Object);
+        var sut = new UiBuilder()
+            .WithMockedInput(isInputValid)
+            .WithMockedNextShootResult(EShootResult.AlreadyHit)
+            .WithMessenger(messengerMock.Object)
+            .Build();
 
         //Act
-        ui.ProcessNextRound();
+        sut.ProcessNextRound();
 
         //Assert
-        messengerMock.Verify(m => m.Write(It.IsRegex("Miss")), Times.Once());
-    }
-
-    [Test]
-    public void Shoot_AlreadyHitField_WritesAlreadyHitMessage()
-    {
-        //Arrange
-        var boardMock = new Mock<IBoard>();
-        boardMock.Setup(x => x.Size);
-        var gameMock = new Mock<IGame>();
-        gameMock.Setup(g => g.Board).Returns(boardMock.Object);
-        gameMock.Setup(g => g.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.AlreadyHit);
-        var messengerMock = new Mock<IMessenger>();
-        var inputTranslatorMock = GetInputTranslatorMock(true);
-
-        var ui = new TextUi(gameMock.Object, messengerMock.Object, inputTranslatorMock.Object);
-
-        //Act
-        ui.ProcessNextRound();
-
-        //Assert
-        messengerMock.Verify(m => m.Write(It.IsRegex("Already hit")), Times.Once());
-    }
-
-    private static Mock<IInputTranslator> GetInputTranslatorMock(bool succeeded)
-    {
-        var inputTranslator = new Mock<IInputTranslator>();
-        Coordinates coordinates = new();
-        inputTranslator.Setup(i => i.TryGetCoordinatesFromInput(It.IsAny<string>(), out coordinates))
-            .Returns(succeeded);
-        return inputTranslator;
+        messengerMock.Verify(m => m.Write("Already hit"), Times.Once());
     }
 }
