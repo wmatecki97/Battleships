@@ -4,14 +4,13 @@ using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models.Boards;
 
-//todo consider moving this to randomplacementboard
 public abstract class BoardBase : IBoard
 {
     protected BoardBase(IEnumerable<IShip> ships, int size)
     {
         Ships = ships;
         Size = size;
-        int fieldsCount = size * size;
+        var fieldsCount = size * size;
         Fields = Enumerable.Range(0, fieldsCount).Select(_ => new Field()).ToArray();
     }
 

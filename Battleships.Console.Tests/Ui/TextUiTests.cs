@@ -6,7 +6,7 @@ using Moq;
 namespace Battleships.Console.Tests.Ui;
 
 [TestFixture]
-public class UiTests
+public class TextUiTests
 {
     [Test]
     public void ProcessNextRound_ValidInput_ShootAtTheFieldGiven()
@@ -19,7 +19,7 @@ public class UiTests
         var gameMock = new Mock<IGame>();
         var messengerMock = new Mock<IMessenger>();
 
-        var sut = new UiBuilder()
+        var sut = new TextUiBuilder()
             .WithMessenger(messengerMock.Object)
             .WithMockedInput(isInputValid, xCoordinate, yCoordinate)
             .WithGame(gameMock.Object)
@@ -40,13 +40,14 @@ public class UiTests
     {
         //Arrange
         const bool isInputValid = false;
+        const int boardSize = 1;
 
         var gameMock = new Mock<IGame>();
         gameMock.Setup(l => l.Board).Returns(new Mock<IBoard>().Object);
 
-        var sut = new UiBuilder()
+        var sut = new TextUiBuilder()
             .WithMockedInput(isInputValid)
-            .WithBoard(1)
+            .WithMockedBoard(boardSize)
             .Build();
 
         //Act
@@ -61,15 +62,15 @@ public class UiTests
     {
         //Arrange
         const bool isInputValid = false;
+        const int boardSize = 2;
 
         var messengerMock = new Mock<IMessenger>();
 
-        var sut = new UiBuilder()
-            .WithBoard(2)
+        var sut = new TextUiBuilder()
+            .WithMockedBoard(boardSize)
             .WithMockedInput(isInputValid)
             .WithMessenger(messengerMock.Object)
             .Build();
-
 
         //Act
         sut.ProcessNextRound();
@@ -91,9 +92,8 @@ public class UiTests
         gameMock.Setup(game => game.IsWon()).Returns(isGameWon);
         var messengerMock = new Mock<IMessenger>();
 
-        var sut = new UiBuilder()
+        var sut = new TextUiBuilder()
             .WithMockedInput(isInputValid)
-            .WithMockedNextShootResult(EShootResult.HitAndSunk)
             .WithMessenger(messengerMock.Object)
             .WithGame(gameMock.Object)
             .Build();
@@ -113,8 +113,7 @@ public class UiTests
         const bool isInputValid = true;
         var messengerMock = new Mock<IMessenger>();
 
-
-        var sut = new UiBuilder()
+        var sut = new TextUiBuilder()
             .WithMockedInput(isInputValid)
             .WithMockedNextShootResult(EShootResult.Hit)
             .WithMessenger(messengerMock.Object)
@@ -134,8 +133,7 @@ public class UiTests
         const bool isInputValid = true;
         var messengerMock = new Mock<IMessenger>();
 
-
-        var sut = new UiBuilder()
+        var sut = new TextUiBuilder()
             .WithMockedInput(isInputValid)
             .WithMockedNextShootResult(EShootResult.Miss)
             .WithMessenger(messengerMock.Object)
@@ -155,7 +153,7 @@ public class UiTests
         var messengerMock = new Mock<IMessenger>();
         const bool isInputValid = true;
 
-        var sut = new UiBuilder()
+        var sut = new TextUiBuilder()
             .WithMockedInput(isInputValid)
             .WithMockedNextShootResult(EShootResult.AlreadyHit)
             .WithMessenger(messengerMock.Object)

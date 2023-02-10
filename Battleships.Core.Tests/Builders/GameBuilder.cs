@@ -1,4 +1,6 @@
 ﻿using Battleships.Core.Interfaces;
+using Battleships.Core.Models;
+using Battleships.Core.Models.Ships;
 using Moq;
 
 namespace Battleships.Core.Tests.Builders;
@@ -11,6 +13,38 @@ internal class GameBuilder
     public GameBuilder WithShip(IShip ship1)
     {
         _ships.Add(ship1);
+        return this;
+    }
+
+    public GameBuilder WithDestroyedShip()
+    {
+        var ship = new Destroyer
+        {
+            Fields =
+            {
+                new Field { IsHit = true },
+                new Field { IsHit = true },
+                new Field { IsHit = true },
+                new Field { IsHit = true }
+            }
+        };
+        _ships.Add(ship);
+        return this;
+    }
+
+    public GameBuilder WithNotDestroyedShip()
+    {
+        var ship = new Destroyer
+        {
+            Fields =
+            {
+                new Field(),
+                new Field(),
+                new Field(),
+                new Field()
+            }
+        };
+        _ships.Add(ship);
         return this;
     }
 

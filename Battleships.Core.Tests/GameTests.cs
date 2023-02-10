@@ -11,23 +11,23 @@ internal class GameTests
 {
     #region ShootTests
 
-    //todo builder
     [Test]
-    public void Shoot_FieldWithShipHighHp_ReturnsHit()
+    public void Shoot_FieldWithNotHitDestroyer_ReturnsHit()
     {
         //Arrange
         int x = 1, y = 1;
         const int shipLength = 5;
 
-        var ship = new Destroyer();
+        var destroyer = new Destroyer();
         var field = new Field
         {
-            Ship = ship
+            Ship = destroyer
         };
-        ship.Fields.AddRange(Enumerable.Range(0, shipLength).Select(_ => new Field()));
+        destroyer.Fields.AddRange(Enumerable.Range(0, shipLength).Select(_ => new Field()));
 
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
+
         var game = new Game(boardMock.Object);
 
         //Act
@@ -42,13 +42,21 @@ internal class GameTests
     {
         //Arrange
         int x = 1, y = 1;
-        var ship = new Destroyer();
-        var field = new Field
+        var fieldToBeShoot = new Field();
+        var destroyer = new Destroyer
         {
-            Ship = ship
+            Fields =
+            {
+                new Field { IsHit = true },
+                new Field { IsHit = true },
+                new Field { IsHit = true },
+                fieldToBeShoot
+            }
         };
+        fieldToBeShoot.Ship = destroyer;
+
         var boardMock = new Mock<IBoard>();
-        boardMock.Setup(b => b.GetField(x, y)).Returns(field);
+        boardMock.Setup(b => b.GetField(x, y)).Returns(fieldToBeShoot);
         var game = new Game(boardMock.Object);
 
         //Act
@@ -65,7 +73,6 @@ internal class GameTests
         int x = 1, y = 1;
         var field = new Field
         {
-            Ship = new Destroyer(),
             IsHit = true
         };
         var boardMock = new Mock<IBoard>();
@@ -143,44 +150,28 @@ internal class GameTests
     #region IsGameWonTests
 
     [Test]
-    public void IsGameWon_AllShipsDestroyed_ReturnsTrue()
+    public void IsWon_AllShipsDestroyed_ReturnsTrue()
     {
         //Arrange
-        var ship1 = GetShipWithAllFieldsHit();
-        var ship2 = GetShipWithAllFieldsHit();
-        var boardMock = new Mock<IBoard>();
-        boardMock.Setup(x => x.Ships).Returns(new[] { ship1, ship2 });
-        var game = new Game(boardMock.Object);
+        var game = new GameBuilder()
+            .WithDestroyedShip()
+            .WithDestroyedShip()
+            .Build();
 
         //Act
         var isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeTrue();
-
-        static Ship GetShipWithAllFieldsHit()
-        {
-            var ship = new Destroyer();
-            ship.Fields.Add(
-                new Field
-                {
-                    IsHit = true
-                }
-            );
-
-            return ship;
-        }
     }
 
     [Test]
-    public void IsGameWon_NoneShipsDestroyed_ReturnsFalse()
+    public void IsWon_NoneShipsDestroyed_ReturnsFalse()
     {
         //Arrange
-        var ship1 = GetShipWithNoFieldsHit();
-        var ship2 = GetShipWithNoFieldsHit();
         var game = new GameBuilder()
-            .WithShip(ship1)
-            .WithShip(ship2)
+            .WithNotDestroyedShip()
+            .WithNotDestroyedShip()
             .Build();
 
         //Act
@@ -191,14 +182,12 @@ internal class GameTests
     }
 
     [Test]
-    public void IsGameWon_SomeShipsDestroyed_ReturnsFalse()
+    public void IsWon_SomeShipsDestroyed_ReturnsFalse()
     {
         //Arrange
-        var ship1 = GetShipWithNoFieldsHit();
-        var ship2 = GetShipWithNoFieldsHit();
         var game = new GameBuilder()
-            .WithShip(ship1)
-            .WithShip(ship2)
+            .WithNotDestroyedShip()
+            .WithDestroyedShip()
             .Build();
 
         //Act
@@ -206,13 +195,6 @@ internal class GameTests
 
         //Assert
         isGameWon.Should().BeFalse();
-    }
-
-    private static Ship GetShipWithNoFieldsHit()
-    {
-        var ship = new Destroyer();
-        ship.Fields.Add(new Field());
-        return ship;
     }
 
     #endregion

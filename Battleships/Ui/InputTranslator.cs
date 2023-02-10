@@ -6,6 +6,11 @@ namespace Battleships.Console.Ui;
 
 internal sealed class InputTranslator : IInputTranslator
 {
+    /// <summary>
+    /// Attempts to map the string input into Coordinates object
+    /// </summary>
+    /// <param name="input">Two characters long input, with letter and number</param>
+    /// <param name="coordinates"></param>
     public bool TryGetCoordinatesFromInput(string input, out Coordinates coordinates)
     {
         coordinates = new Coordinates();

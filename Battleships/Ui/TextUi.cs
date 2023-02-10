@@ -44,7 +44,6 @@ internal sealed class TextUi
         }
         else
         {
-            //todo test
             _messenger.Write(
                 $"Field coordinates should be a character A-{(char)('A' + _game.Board.Size - 1)} followed by a number 0-{_game.Board.Size - 1} e.g. a1");
         }

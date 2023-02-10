@@ -5,12 +5,15 @@ using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models.Boards;
 
+/// <summary>
+/// Board that places the given ships in the random places by default
+/// </summary>
 public class RandomShipPlacementBoard : BoardBase
 {
     //todo wrap to test
     private readonly Random _rand = new();
 
-    protected RandomShipPlacementBoard(IEnumerable<IShip> ships, int size) : base(ships, size)
+    public RandomShipPlacementBoard(IEnumerable<IShip> ships, int size) : base(ships, size)
     {
         foreach (var ship in Ships)
         {

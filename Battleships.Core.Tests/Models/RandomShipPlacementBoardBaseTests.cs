@@ -18,7 +18,7 @@ internal class RandomShipPlacementBoardBaseTests
         };
 
         //Act
-        var board = new TestRandomShipPlacementBoard(ships, 10);
+        var board = new RandomShipPlacementBoard(ships, 10);
 
         //Assert
         board.Ships.All(s => s.Fields.Count == s.Length).Should().BeTrue();
@@ -33,18 +33,11 @@ internal class RandomShipPlacementBoardBaseTests
             new Destroyer(),
             new Battleship()
         };
-        int expectedFieldsWithShipsCount = ships.Sum(s => s.Length);
+        var expectedFieldsWithShipsCount = ships.Sum(s => s.Length);
 
         //Act
-        var board = new TestRandomShipPlacementBoard(ships, 10);
+        var board = new RandomShipPlacementBoard(ships, 10);
 
         board.Fields.Where(f => f.Ship != null).Should().HaveCount(expectedFieldsWithShipsCount);
-    }
-
-    private class TestRandomShipPlacementBoard : RandomShipPlacementBoard
-    {
-        public TestRandomShipPlacementBoard(IEnumerable<IShip> ships, int size) : base(ships, size)
-        {
-        }
     }
 }

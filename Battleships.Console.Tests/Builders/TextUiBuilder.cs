@@ -7,40 +7,41 @@ using Moq;
 
 namespace Battleships.Console.Tests.Builders;
 
-internal class UiBuilder
+internal class TextUiBuilder
 {
-    private Mock<IBoard>? _boardMock;
+    private IBoard? _board;
     private IGame? _game;
     private IInputTranslator? _inputTranslator;
     private IMessenger? _messenger;
     private EShootResult? _nextShootResult;
 
-    public UiBuilder WithBoard(int size)
+    public TextUiBuilder WithMockedBoard(int size)
     {
-        _boardMock = new Mock<IBoard>();
-        _boardMock.Setup(b => b.Size).Returns(size);
+        var board = new Mock<IBoard>();
+        board.Setup(b => b.Size).Returns(size);
+        _board = board.Object;
         return this;
     }
 
-    public UiBuilder WithGame(IGame game)
+    public TextUiBuilder WithGame(IGame game)
     {
         _game = game;
         return this;
     }
 
-    public UiBuilder WithMockedNextShootResult(EShootResult shootResult)
+    public TextUiBuilder WithMockedNextShootResult(EShootResult shootResult)
     {
         _nextShootResult = shootResult;
         return this;
     }
 
-    public UiBuilder WithMessenger(IMessenger messenger)
+    public TextUiBuilder WithMessenger(IMessenger messenger)
     {
         _messenger = messenger;
         return this;
     }
 
-    public UiBuilder WithMockedInput(bool valid, int xCoordinate = 0, int yCoordinate = 0)
+    public TextUiBuilder WithMockedInput(bool valid, int xCoordinate = 0, int yCoordinate = 0)
     {
         var coordinates = new Coordinates
         {
@@ -59,12 +60,12 @@ internal class UiBuilder
 
     public TextUi Build()
     {
-        _boardMock ??= new Mock<IBoard>();
+        _board ??= new Mock<IBoard>().Object;
 
         if (_game is null)
         {
             var gameMock = new Mock<IGame>();
-            gameMock.Setup(g => g.Board).Returns(_boardMock.Object);
+            gameMock.Setup(g => g.Board).Returns(_board);
             if (_nextShootResult is not null)
             {
                 gameMock.Setup(g => g.Shoot(It.IsAny<int>(), It.IsAny<int>()))
@@ -77,7 +78,6 @@ internal class UiBuilder
         _messenger ??= new Mock<IMessenger>().Object;
         _inputTranslator ??= new Mock<IInputTranslator>().Object;
 
-        var ui = new TextUi(_game, _messenger, _inputTranslator);
-        return ui;
+        return new TextUi(_game, _messenger, _inputTranslator);
     }
 }
