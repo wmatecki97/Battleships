@@ -73,7 +73,6 @@ public class UiTests
         var gameMock = new Mock<IGame>();
         gameMock.Setup(game => game.Shoot(It.IsAny<int>(), It.IsAny<int>())).Returns(EShootResult.HitAndSunk);
         gameMock.Setup(game => game.IsGameWon()).Returns(true);
-        gameMock.Setup(game => game.Board).Returns(new Board(0));
 
         var messengerMock = new Mock<IMessenger>();
         messengerMock.Setup(m => m.Write(It.IsAny<string>()));

@@ -2,20 +2,17 @@
 using System.Linq;
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
-using Battleships.Core.Models.Boards;
 
 namespace Battleships.Core;
 
-public sealed class GameLogic : IGame
+public sealed class Game : IGame
 {
-    public GameLogic(IBoard board)
+    public Game(IBoard board)
     {
         Board = board;
-        Ships = new List<IShip>();
     }
 
     public IBoard Board { get; }
-    public List<IShip> Ships { get; }
 
     public EShootResult Shoot(int x, int y)
     {
@@ -36,8 +33,9 @@ public sealed class GameLogic : IGame
         return EShootResult.Miss;
     }
 
+    //todo include in shoot
     public bool IsGameWon()
     {
-        return Ships.All(s => s.Fields.All(f => f.IsHit));
+        return Board.Ships.All(s => s.Fields.All(f => f.IsHit));
     }
 }

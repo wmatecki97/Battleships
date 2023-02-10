@@ -10,33 +10,35 @@ internal class RandomShipPlacementBoardBaseTests
     [Test]
     public void RandomShipPlacementBoardCreation_MultipleShipsGiven_AllShipsHaveCorrectNoOfFieldsAssigned()
     {
+        //Arrange
         var ships = new IShip[]
         {
             new Destroyer(),
             new Battleship()
         };
 
+        //Act
         var board = new TestRandomShipPlacementBoard(ships, 10);
 
-        board.Ships.ToList().ForEach(s =>
-            s.Fields.Count.Should().Be(s.Length, $"Ship of length {s.Length} should have {s.Length} fields assigned."));
+        //Assert
+        board.Ships.All(s => s.Fields.Count == s.Length).Should().BeTrue();
     }
 
     [Test]
     public void RandomShipPlacementBoardCreation_MultipleShipsGiven_FieldsWithShipsCountIsSameAsTotalShipsLength()
     {
+        //Arrange
         var ships = new IShip[]
         {
             new Destroyer(),
             new Battleship()
         };
+        int expectedFieldsWithShipsCount = ships.Sum(s => s.Length);
 
+        //Act
         var board = new TestRandomShipPlacementBoard(ships, 10);
 
-        int noOfFieldsWithShips = board.Fields.Count(f => f.Ship != null);
-        int totalShipsLength = board.Ships.Sum(s => s.Length);
-        noOfFieldsWithShips.Should().Be(totalShipsLength,
-            $"Number of fields with ships should be {totalShipsLength}, but it was {noOfFieldsWithShips}");
+        board.Fields.Where(f => f.Ship != null).Should().HaveCount(expectedFieldsWithShipsCount);
     }
 
     private class TestRandomShipPlacementBoard : RandomShipPlacementBoardBase

@@ -1,6 +1,7 @@
 ﻿using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 using Battleships.Core.Models.Ships;
+using Battleships.Core.Tests.Builders;
 using FluentAssertions;
 using Moq;
 
@@ -9,7 +10,7 @@ namespace Battleships.Core.Tests;
 internal class GameTests
 {
     #region ShootTests
-
+    //todo builder
     [Test]
     public void Shoot_FieldWithShipHighHp_ReturnsHit()
     {
@@ -26,8 +27,7 @@ internal class GameTests
 
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(boardMock.Object);
+        var game = new Game(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -48,8 +48,7 @@ internal class GameTests
         };
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(boardMock.Object);
+        var game = new Game(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -70,8 +69,7 @@ internal class GameTests
         };
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(boardMock.Object);
+        var game = new Game(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -88,8 +86,7 @@ internal class GameTests
         var field = new Field();
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(boardMock.Object);
+        var game = new Game(boardMock.Object);
 
         //Act
         var result = game.Shoot(x, y);
@@ -109,8 +106,7 @@ internal class GameTests
         };
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(boardMock.Object);
+        var game = new Game(boardMock.Object);
 
         //Act
         game.Shoot(x, y);
@@ -132,8 +128,7 @@ internal class GameTests
         ship.Fields.Add(field);
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(boardMock.Object);
+        var game = new Game(boardMock.Object);
 
         //Act
         game.Shoot(x, y);
@@ -150,14 +145,12 @@ internal class GameTests
     public void IsGameWon_AllShipsDestroyed_ReturnsTrue()
     {
         //Arrange
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(initializer: initializer);
         var ship1 = GetShipWithAllFieldsHit();
         var ship2 = GetShipWithAllFieldsHit();
-
-        game.Ships.Add(ship1);
-        game.Ships.Add(ship2);
-
+        var boardMock = new Mock<IBoard>();
+        boardMock.Setup(x => x.Ships).Returns(new[] { ship1, ship2 });
+        var game = new Game(boardMock.Object);
+        
         //Act
         var isGameWon = game.IsGameWon();
 
@@ -182,54 +175,43 @@ internal class GameTests
     public void IsGameWon_NoneShipsDestroyed_ReturnsFalse()
     {
         //Arrange
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(initializer: initializer);
         var ship1 = GetShipWithNoFieldsHit();
         var ship2 = GetShipWithNoFieldsHit();
-
-        game.Ships.Add(ship1);
-        game.Ships.Add(ship2);
+        var game = new GameBuilder()
+            .WithShip(ship1)
+            .WithShip(ship2)
+            .Build();
 
         //Act
         var isGameWon = game.IsGameWon();
 
         //Assert
         isGameWon.Should().BeFalse();
-
-        static Ship GetShipWithNoFieldsHit()
-        {
-            var ship = new Destroyer();
-            ship.Fields.Add(new Field());
-
-            return ship;
-        }
     }
 
     [Test]
     public void IsGameWon_SomeShipsDestroyed_ReturnsFalse()
     {
         //Arrange
-        var initializer = new Mock<IGameInitializer>().Object;
-        var game = new GameLogic(initializer: initializer);
         var ship1 = GetShipWithNoFieldsHit();
         var ship2 = GetShipWithNoFieldsHit();
-
-        game.Ships.Add(ship1);
-        game.Ships.Add(ship2);
+        var game = new GameBuilder()
+            .WithShip(ship1)
+            .WithShip(ship2)
+            .Build();
 
         //Act
         var isGameWon = game.IsGameWon();
 
         //Assert
         isGameWon.Should().BeFalse();
+    }
 
-        static Ship GetShipWithNoFieldsHit()
-        {
-            var ship = new Destroyer();
-            ship.Fields.Add(new Field());
-
-            return ship;
-        }
+    private static Ship GetShipWithNoFieldsHit()
+    {
+        var ship = new Destroyer();
+        ship.Fields.Add(new Field());
+        return ship;
     }
 
     #endregion
