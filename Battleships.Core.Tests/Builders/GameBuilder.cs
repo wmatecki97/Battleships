@@ -10,12 +10,6 @@ internal class GameBuilder
     private readonly Mock<IBoard> _boardMock = new();
     private readonly List<IShip> _ships = new();
 
-    public GameBuilder WithShip(IShip ship1)
-    {
-        _ships.Add(ship1);
-        return this;
-    }
-
     public GameBuilder WithDestroyedShip()
     {
         var ship = new Destroyer
