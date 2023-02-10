@@ -1,7 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using Battleships.Console.Interfaces;
+using Battleships.Console.Models;
 
-namespace Battleships.Console;
+namespace Battleships.Console.Ui;
 
 internal sealed class InputTranslator : IInputTranslator
 {

@@ -1,8 +1,9 @@
+using Battleships.Console.Tests.Builders;
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 using Moq;
 
-namespace Battleships.Console.Tests;
+namespace Battleships.Console.Tests.Ui;
 
 [TestFixture]
 public class UiTests

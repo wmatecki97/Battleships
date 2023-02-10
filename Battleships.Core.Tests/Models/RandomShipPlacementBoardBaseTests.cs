@@ -3,7 +3,7 @@ using Battleships.Core.Models.Boards;
 using Battleships.Core.Models.Ships;
 using FluentAssertions;
 
-namespace Battleships.Core.Tests;
+namespace Battleships.Core.Tests.Models;
 
 internal class RandomShipPlacementBoardBaseTests
 {
@@ -41,7 +41,7 @@ internal class RandomShipPlacementBoardBaseTests
         board.Fields.Where(f => f.Ship != null).Should().HaveCount(expectedFieldsWithShipsCount);
     }
 
-    private class TestRandomShipPlacementBoard : RandomShipPlacementBoardBase
+    private class TestRandomShipPlacementBoard : RandomShipPlacementBoard
     {
         public TestRandomShipPlacementBoard(IEnumerable<IShip> ships, int size) : base(ships, size)
         {

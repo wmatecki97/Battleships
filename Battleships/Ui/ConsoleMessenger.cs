@@ -1,6 +1,6 @@
 ﻿using Battleships.Core.Interfaces;
 
-namespace Battleships.Console;
+namespace Battleships.Console.Ui;
 
 internal class ConsoleMessenger : IMessenger
 {

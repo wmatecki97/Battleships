@@ -1,4 +1,4 @@
-﻿using Battleships.Console;
+﻿using Battleships.Console.Ui;
 using Battleships.Core;
 using Battleships.Core.Models.Boards;
 

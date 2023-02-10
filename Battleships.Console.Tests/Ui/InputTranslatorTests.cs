@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+﻿using Battleships.Console.Ui;
+using FluentAssertions;
 
-namespace Battleships.Console.Tests;
+namespace Battleships.Console.Tests.Ui;
 
 internal class InputTranslatorTests
 {

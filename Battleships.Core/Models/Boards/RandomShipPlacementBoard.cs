@@ -5,12 +5,12 @@ using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models.Boards;
 
-public class RandomShipPlacementBoardBase : BoardBase
+public class RandomShipPlacementBoard : BoardBase
 {
     //todo wrap to test
     private readonly Random _rand = new();
 
-    protected RandomShipPlacementBoardBase(IEnumerable<IShip> ships, int size) : base(ships, size)
+    protected RandomShipPlacementBoard(IEnumerable<IShip> ships, int size) : base(ships, size)
     {
         foreach (var ship in Ships)
         {
@@ -26,7 +26,7 @@ public class RandomShipPlacementBoardBase : BoardBase
         {
             var isShipPlacedVertically = _rand.Next(0, 1) == 0;
 
-            GetPossibleHorizontalPlacement(out var startX, out var startY, out var endX, out var endY, ship.Length);
+            GetRandomPossibleHorizontalPlacement(out var startX, out var startY, out var endX, out var endY, ship.Length);
 
             if (isShipPlacedVertically)
             {
@@ -52,7 +52,7 @@ public class RandomShipPlacementBoardBase : BoardBase
         }
     }
 
-    private void GetPossibleHorizontalPlacement(out int x1, out int y1, out int x2, out int y2, int shipLength)
+    private void GetRandomPossibleHorizontalPlacement(out int x1, out int y1, out int x2, out int y2, int shipLength)
     {
         x1 = _rand.Next(0, Size - shipLength + 1); //for length 3 ship and size 4 board we can start at index 0 or 1
         y1 = _rand.Next(0, Size);

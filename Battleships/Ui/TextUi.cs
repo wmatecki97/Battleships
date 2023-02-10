@@ -2,7 +2,7 @@
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 
-namespace Battleships.Console;
+namespace Battleships.Console.Ui;
 
 internal sealed class TextUi
 {

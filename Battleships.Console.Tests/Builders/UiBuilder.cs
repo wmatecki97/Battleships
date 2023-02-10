@@ -1,9 +1,11 @@
 ﻿using Battleships.Console.Interfaces;
+using Battleships.Console.Models;
+using Battleships.Console.Ui;
 using Battleships.Core.Interfaces;
 using Battleships.Core.Models;
 using Moq;
 
-namespace Battleships.Console.Tests;
+namespace Battleships.Console.Tests.Builders;
 
 internal class UiBuilder
 {
