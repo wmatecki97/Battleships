@@ -44,9 +44,9 @@ public class RandomShipPlacementBoard : BoardBase
         }
     }
 
-    private List<Placement> GetAllPossiblePlacementsOfShip(IShip ship)
+    private List<ShipCoordinate> GetAllPossiblePlacementsOfShip(IShip ship)
     {
-        var possiblePlacements = new List<Placement>();
+        var possiblePlacements = new List<ShipCoordinate>();
         for (int x = 0; x < Size; x++)
         {
             for (int y = 0; y < Size; y++)
@@ -73,12 +73,12 @@ public class RandomShipPlacementBoard : BoardBase
 
                 if (isHorizontalPlacementValid)
                 {
-                    possiblePlacements.Add(new Placement { X1 = x, Y1 = y, X2 = x, Y2 = y + ship.Length - 1 });
+                    possiblePlacements.Add(new ShipCoordinate { X1 = x, Y1 = y, X2 = x, Y2 = y + ship.Length - 1 });
                 }
 
                 if (isVerticalPlacementValid)
                 {
-                    possiblePlacements.Add(new Placement { X1 = x, Y1 = y, X2 = x + ship.Length - 1, Y2 = y });
+                    possiblePlacements.Add(new ShipCoordinate { X1 = x, Y1 = y, X2 = x + ship.Length - 1, Y2 = y });
                 }
             }
         }
