@@ -2,7 +2,7 @@
 using Battleships.Core;
 using Battleships.Core.Models.Boards;
 
-var board = new DefaultBoard();
+var board = new DefaultBoard(new RandomNumberGenerator());
 var game = new Game(board);
 
 var uI = new TextUi(game, new ConsoleMessenger(), new InputTranslator());

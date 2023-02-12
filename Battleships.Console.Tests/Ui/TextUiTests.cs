@@ -104,6 +104,7 @@ public class TextUiTests
         //Assert
         messengerMock.Verify(m => m.Write("Hit and sunk"), Times.Once());
         messengerMock.Verify(m => m.Write("You won!"), Times.Once());
+        messengerMock.VerifyAll();
     }
 
     [Test]

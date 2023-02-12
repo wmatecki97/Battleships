@@ -3,7 +3,7 @@ using Battleships.Core.Interfaces;
 
 namespace Battleships.Core;
 
-internal class RandomNumberGenerator : IRandomNumberGenerator
+public class RandomNumberGenerator : IRandomNumberGenerator
 {
     private readonly Random _rand;
 

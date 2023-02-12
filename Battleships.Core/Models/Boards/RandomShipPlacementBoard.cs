@@ -11,7 +11,8 @@ public class RandomShipPlacementBoard : BoardBase
 {
     private readonly IRandomNumberGenerator _randomNumberGenerator;
 
-    public RandomShipPlacementBoard(IEnumerable<IShip> ships, int size, IRandomNumberGenerator randomNumberGenerator) : base(ships, size)
+    public RandomShipPlacementBoard(IEnumerable<IShip> ships, int size, IRandomNumberGenerator randomNumberGenerator) :
+        base(ships, size)
     {
         _randomNumberGenerator = randomNumberGenerator;
         foreach (var ship in Ships)
@@ -37,7 +38,7 @@ public class RandomShipPlacementBoard : BoardBase
             for (int y = selectedPlacement.Y1; y <= selectedPlacement.Y2; y++)
             {
                 var field = GetField(x, y);
-                field.Ship =ship;
+                field.Ship = ship;
                 ship.Fields.Add(field);
             }
         }
@@ -46,20 +47,20 @@ public class RandomShipPlacementBoard : BoardBase
     private List<Placement> GetAllPossiblePlacementsOfShip(IShip ship)
     {
         var possiblePlacements = new List<Placement>();
-        for (int x = 0; x < Size - ship.Length + 1; x++)
+        for (int x = 0; x < Size; x++)
         {
-            for (int y = 0; y < Size - ship.Length + 1; y++)
+            for (int y = 0; y < Size; y++)
             {
-                bool isHorizontalPlacementValid = true;
-                bool isVerticalPlacementValid = true;
+                var isHorizontalPlacementValid = true;
+                var isVerticalPlacementValid = true;
                 for (int s = 0; s < ship.Length; s++)
                 {
-                    if (!IsEmpty(x, y + s))
+                    if (y > Size - ship.Length || IsNotEmpty(x, y + s))
                     {
                         isHorizontalPlacementValid = false;
                     }
 
-                    if (!IsEmpty(x + s, y))
+                    if (x > Size - ship.Length || IsNotEmpty(x + s, y))
                     {
                         isVerticalPlacementValid = false;
                     }
@@ -85,8 +86,8 @@ public class RandomShipPlacementBoard : BoardBase
         return possiblePlacements;
     }
 
-    private bool IsEmpty(int i, int j)
+    private bool IsNotEmpty(int i, int j)
     {
-        return GetField(i,j).Ship is null;
+        return GetField(i, j).Ship is not null;
     }
 }
