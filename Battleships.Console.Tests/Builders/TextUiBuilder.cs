@@ -43,7 +43,7 @@ internal class TextUiBuilder
 
     public TextUiBuilder WithMockedInput(bool valid, int xCoordinate = 0, int yCoordinate = 0)
     {
-        var coordinates = new Coordinates
+        var coordinates = new Coordinate
         {
             X = xCoordinate,
             Y = yCoordinate
