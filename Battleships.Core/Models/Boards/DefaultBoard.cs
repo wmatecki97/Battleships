@@ -16,7 +16,7 @@ public class DefaultBoard : RandomShipPlacementBoard
         new Destroyer()
     };
 
-    public DefaultBoard() : base(DefaultShips, DefaultSize)
+    public DefaultBoard(IRandomNumberGenerator randomNumberGenerator) : base(DefaultShips, DefaultSize, randomNumberGenerator)
     {
     }
 

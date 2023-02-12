@@ -14,7 +14,7 @@ internal class InputTranslatorTests
     {
         //Arrange
         var translator = new InputTranslator();
-        var expectedResult = new Coordinates
+        var expectedResult = new Coordinate
         {
             X = x,
             Y = y
