@@ -7,13 +7,13 @@ namespace Battleships.Console.Ui;
 internal sealed class InputTranslator : IInputTranslator
 {
     /// <summary>
-    /// Attempts to map the string input into Coordinates object
+    /// Attempts to map the string input into Coordinate object
     /// </summary>
     /// <param name="input">Two characters long input, with letter and number</param>
-    /// <param name="coordinates"></param>
-    public bool TryGetCoordinatesFromInput(string input, out Coordinates coordinates)
+    /// <param name="coordinate"></param>
+    public bool TryGetCoordinatesFromInput(string input, out Coordinate coordinate)
     {
-        coordinates = new Coordinates();
+        coordinate = new Coordinate();
 
         if (!IsInputValid(input))
         {
@@ -21,8 +21,8 @@ internal sealed class InputTranslator : IInputTranslator
         }
 
         input = input.ToUpper();
-        coordinates.X = input.First() - 'A';
-        coordinates.Y = int.Parse(input.Last().ToString());
+        coordinate.X = input.First() - 'A';
+        coordinate.Y = int.Parse(input.Last().ToString());
 
         return true;
     }

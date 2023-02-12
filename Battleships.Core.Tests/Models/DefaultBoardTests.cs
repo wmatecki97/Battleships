@@ -9,7 +9,7 @@ internal class DefaultBoardTests
     [Test]
     public void Init_DefaultInitialization_AddsTwoDestroyersAndBattleshipToTheBoardByDefault()
     {
-        var board = new DefaultBoard();
+        var board = new DefaultBoard(new RandomNumberGenerator());
 
         board.Ships.Where(s => s is Destroyer).Should().HaveCount(2);
         board.Ships.Where(s => s is Battleship).Should().HaveCount(1);
@@ -20,7 +20,8 @@ internal class DefaultBoardTests
     public void Init_DefaultInitialization_HaveSizeOf10()
     {
         const int expectedBoardSize = 10;
-        var board = new DefaultBoard();
+       
+        var board = new DefaultBoard(new RandomNumberGenerator());
 
         board.Size.Should().Be(expectedBoardSize);
     }

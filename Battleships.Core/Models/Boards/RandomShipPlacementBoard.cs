@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Battleships.Core.Exceptions;
 using Battleships.Core.Interfaces;
 
 namespace Battleships.Core.Models.Boards;
@@ -10,11 +9,12 @@ namespace Battleships.Core.Models.Boards;
 /// </summary>
 public class RandomShipPlacementBoard : BoardBase
 {
-    //todo wrap to test
-    private readonly Random _rand = new();
+    private readonly IRandomNumberGenerator _randomNumberGenerator;
 
-    public RandomShipPlacementBoard(IEnumerable<IShip> ships, int size) : base(ships, size)
+    public RandomShipPlacementBoard(IEnumerable<IShip> ships, int size, IRandomNumberGenerator randomNumberGenerator) :
+        base(ships, size)
     {
+        _randomNumberGenerator = randomNumberGenerator;
         foreach (var ship in Ships)
         {
             PlaceShipOnBoardRandomly(ship);
@@ -23,43 +23,71 @@ public class RandomShipPlacementBoard : BoardBase
 
     private void PlaceShipOnBoardRandomly(IShip ship)
     {
-        bool isFieldFree = false;
+        var possiblePlacements = GetAllPossiblePlacementsOfShip(ship);
 
-        while (!isFieldFree)
+        if (possiblePlacements.Count == 0)
         {
-            var isShipPlacedVertically = _rand.Next(0, 1) == 0;
+            throw new NotEnoughPlaceOnTheBoardException();
+        }
 
-            GetRandomPossibleHorizontalPlacement(out var startX, out var startY, out var endX, out var endY, ship.Length);
+        var randomPlacementId = _randomNumberGenerator.GetRandomNumber(0, possiblePlacements.Count);
+        var selectedPlacement = possiblePlacements[randomPlacementId];
 
-            if (isShipPlacedVertically)
+        for (int x = selectedPlacement.X1; x <= selectedPlacement.X2; x++)
+        {
+            for (int y = selectedPlacement.Y1; y <= selectedPlacement.Y2; y++)
             {
-                (startX, startY) = (startY, startX);
-                (endX, endY) = (endY, endX);
-            }
-
-            var coordinates = from x in Enumerable.Range(startX, endX - startX + 1)
-                from y in Enumerable.Range(startY, endY - startY + 1)
-                select new { X = x, Y = y };
-
-            var fieldsToCheck = coordinates.Select(f => GetField(f.X, f.Y)).ToList();
-            isFieldFree = fieldsToCheck.All(f => f.Ship is null);
-
-            if (isFieldFree)
-            {
-                fieldsToCheck.ForEach(f =>
-                {
-                    f.Ship = ship;
-                    ship.Fields.Add(f);
-                });
+                var field = GetField(x, y);
+                field.Ship = ship;
+                ship.Fields.Add(field);
             }
         }
     }
 
-    private void GetRandomPossibleHorizontalPlacement(out int x1, out int y1, out int x2, out int y2, int shipLength)
+    private List<ShipCoordinate> GetAllPossiblePlacementsOfShip(IShip ship)
     {
-        x1 = _rand.Next(0, Size - shipLength + 1); //for length 3 ship and size 4 board we can start at index 0 or 1
-        y1 = _rand.Next(0, Size);
-        x2 = x1 + shipLength - 1;
-        y2 = y1;
+        var possiblePlacements = new List<ShipCoordinate>();
+        for (int x = 0; x < Size; x++)
+        {
+            for (int y = 0; y < Size; y++)
+            {
+                var isHorizontalPlacementValid = true;
+                var isVerticalPlacementValid = true;
+                for (int s = 0; s < ship.Length; s++)
+                {
+                    if (y > Size - ship.Length || IsNotEmpty(x, y + s))
+                    {
+                        isHorizontalPlacementValid = false;
+                    }
+
+                    if (x > Size - ship.Length || IsNotEmpty(x + s, y))
+                    {
+                        isVerticalPlacementValid = false;
+                    }
+
+                    if (!isHorizontalPlacementValid && !isVerticalPlacementValid)
+                    {
+                        break;
+                    }
+                }
+
+                if (isHorizontalPlacementValid)
+                {
+                    possiblePlacements.Add(new ShipCoordinate { X1 = x, Y1 = y, X2 = x, Y2 = y + ship.Length - 1 });
+                }
+
+                if (isVerticalPlacementValid)
+                {
+                    possiblePlacements.Add(new ShipCoordinate { X1 = x, Y1 = y, X2 = x + ship.Length - 1, Y2 = y });
+                }
+            }
+        }
+
+        return possiblePlacements;
+    }
+
+    private bool IsNotEmpty(int i, int j)
+    {
+        return GetField(i, j).Ship is not null;
     }
 }
