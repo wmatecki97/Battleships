@@ -5,6 +5,9 @@ using Battleships.Core.Models.Ships;
 using FluentAssertions;
 using Moq;
 
+// ReSharper disable ObjectCreationAsStatement
+#pragma warning disable CA1806
+
 namespace Battleships.Core.Tests.Models;
 
 internal class RandomShipPlacementBoardBaseTests
@@ -78,7 +81,7 @@ internal class RandomShipPlacementBoardBaseTests
         //Act
         Action boardCreation =() => new RandomShipPlacementBoard(ships, lessThanDestroyerLength, new RandomNumberGenerator());
 
-        //Asssert
+        //Assert
         boardCreation.Should().ThrowExactly<NotEnoughPlaceOnTheBoardException>();
     }
 }
