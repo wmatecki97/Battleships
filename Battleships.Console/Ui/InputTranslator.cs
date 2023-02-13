@@ -27,7 +27,7 @@ internal sealed class InputTranslator : IInputTranslator
         return true;
     }
 
-    private bool IsInputValid(string input)
+    private static bool IsInputValid(string input)
     {
         return !string.IsNullOrEmpty(input)
                && input.Length == 2

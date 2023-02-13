@@ -15,7 +15,8 @@ internal class GameTests
     public void Shoot_FieldWithNotHitDestroyer_ReturnsHit()
     {
         //Arrange
-        int x = 1, y = 1;
+        const int x = 1;
+        const int y = 1;
         const int shipLength = 5;
 
         var destroyer = new Destroyer();
@@ -41,7 +42,8 @@ internal class GameTests
     public void Shoot_FieldWithShipWithLastHp_ReturnsHitAndSunk()
     {
         //Arrange
-        int x = 1, y = 1;
+        const int x = 1;
+        const int y = 1;
         var fieldToBeShoot = new Field();
         var destroyer = new Destroyer
         {
@@ -70,7 +72,8 @@ internal class GameTests
     public void Shoot_AlreadyHitField_ReturnsAlreadyHitStatus()
     {
         //Arrange
-        int x = 1, y = 1;
+        const int x = 1;
+        const int y = 1;
         var field = new Field
         {
             IsHit = true
@@ -90,7 +93,8 @@ internal class GameTests
     public void Shoot_FieldWithoutShip_ReturnsMiss()
     {
         //Arrange
-        int x = 1, y = 1;
+        const int x = 1;
+        const int y = 1;
         var field = new Field();
         var boardMock = new Mock<IBoard>();
         boardMock.Setup(b => b.GetField(x, y)).Returns(field);
@@ -107,7 +111,8 @@ internal class GameTests
     public void Shoot_FieldWithShip_FieldIsHit()
     {
         //Arrange
-        int x = 1, y = 1;
+        const int x = 1;
+        const int y = 1;
         var field = new Field
         {
             Ship = new Destroyer()
@@ -127,7 +132,8 @@ internal class GameTests
     public void Shoot_FieldWithShip_ShipFieldIsHit()
     {
         //Arrange
-        int x = 1, y = 1;
+        const int x = 1;
+        const int y = 1;
         Ship ship = new Destroyer();
         var field = new Field
         {

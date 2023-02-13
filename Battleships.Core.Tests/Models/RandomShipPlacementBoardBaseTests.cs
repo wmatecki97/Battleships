@@ -46,14 +46,15 @@ internal class RandomShipPlacementBoardBaseTests
         board.Fields.Where(f => f.Ship != null).Should().HaveCount(expectedFieldsWithShipsCount);
     }
 
-    [TestCase(4, 8)]//4x4 board with 4 length ship gives 4 horizontal + 4 vertical possible placements
+    [TestCase(4, 8)] //4x4 board with 4 length ship gives 4 horizontal + 4 vertical possible placements
     [TestCase(10, 140)]
-    public void RandomShipPlacementBoardCreation_OneDestroyerOnly_UsesAllPossiblePlacementsToPutTheShipOnBoard(int boardSize, int numberOfPossiblePlacements)
+    public void RandomShipPlacementBoardCreation_OneDestroyerOnly_UsesAllPossiblePlacementsToPutTheShipOnBoard(
+        int boardSize, int numberOfPossiblePlacements)
     {
         //Arrange
         var ships = new IShip[]
         {
-            new Destroyer(),
+            new Destroyer()
         };
 
         var randomNumberGeneratorMock = new Mock<IRandomNumberGenerator>();
@@ -73,13 +74,14 @@ internal class RandomShipPlacementBoardBaseTests
         //Arrange
         var ships = new IShip[]
         {
-            new Destroyer(),
+            new Destroyer()
         };
 
         const int lessThanDestroyerLength = 3;
 
         //Act
-        Action boardCreation =() => new RandomShipPlacementBoard(ships, lessThanDestroyerLength, new RandomNumberGenerator());
+        Action boardCreation = () =>
+            new RandomShipPlacementBoard(ships, lessThanDestroyerLength, new RandomNumberGenerator());
 
         //Assert
         boardCreation.Should().ThrowExactly<NotEnoughPlaceOnTheBoardException>();

@@ -49,7 +49,7 @@ internal sealed class TextUi
         }
     }
 
-    private string GetHitResultMessage(EShootResult status)
+    private static string GetHitResultMessage(EShootResult status)
     {
         return status switch
         {
