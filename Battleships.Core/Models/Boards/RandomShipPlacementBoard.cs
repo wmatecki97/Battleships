@@ -5,7 +5,7 @@ using Battleships.Core.Interfaces;
 namespace Battleships.Core.Models.Boards;
 
 /// <summary>
-/// Board that places the given ships in the random places by default
+///     Board that places the given ships in the random places by default
 /// </summary>
 public class RandomShipPlacementBoard : BoardBase
 {

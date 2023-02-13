@@ -20,7 +20,7 @@ internal class DefaultBoardTests
     public void Init_DefaultInitialization_HaveSizeOf10()
     {
         const int expectedBoardSize = 10;
-       
+
         var board = new DefaultBoard(new RandomNumberGenerator());
 
         board.Size.Should().Be(expectedBoardSize);

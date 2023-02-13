@@ -38,7 +38,7 @@ internal class RandomShipPlacementBoardBaseTests
             new Destroyer(),
             new Battleship()
         };
-        var expectedFieldsWithShipsCount = ships.Sum(s => s.Length);
+        int expectedFieldsWithShipsCount = ships.Sum(s => s.Length);
 
         //Act
         var board = new RandomShipPlacementBoard(ships, 10, new RandomNumberGenerator());

@@ -165,7 +165,7 @@ internal class GameTests
             .Build();
 
         //Act
-        var isGameWon = game.IsWon();
+        bool isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeTrue();
@@ -181,7 +181,7 @@ internal class GameTests
             .Build();
 
         //Act
-        var isGameWon = game.IsWon();
+        bool isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeFalse();
@@ -197,7 +197,7 @@ internal class GameTests
             .Build();
 
         //Act
-        var isGameWon = game.IsWon();
+        bool isGameWon = game.IsWon();
 
         //Assert
         isGameWon.Should().BeFalse();

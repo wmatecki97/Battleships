@@ -33,7 +33,7 @@ public sealed class TextUi
         if (_inputTranslator.TryGetCoordinatesFromInput(input, out var coordinates))
         {
             var shootStatus = _game.Shoot(coordinates.X, coordinates.Y);
-            var message = GetHitResultMessage(shootStatus);
+            string message = GetHitResultMessage(shootStatus);
             _messenger.Write(message);
 
             if (shootStatus == EShootResult.HitAndSunk && _game.IsWon())

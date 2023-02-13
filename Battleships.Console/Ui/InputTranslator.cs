@@ -7,7 +7,7 @@ namespace Battleships.Console.Ui;
 internal sealed class InputTranslator : IInputTranslator
 {
     /// <summary>
-    /// Attempts to map the string input into Coordinate object
+    ///     Attempts to map the string input into Coordinate object
     /// </summary>
     /// <param name="input">Two characters long input, with letter and number</param>
     /// <param name="coordinate"></param>
