@@ -41,7 +41,7 @@ internal class InputTranslatorTests
         var translator = new InputTranslator();
 
         //Act
-        var result = translator.TryGetCoordinatesFromInput(input, out _);
+        bool result = translator.TryGetCoordinatesFromInput(input, out _);
 
         //Assert
         result.Should().BeFalse();

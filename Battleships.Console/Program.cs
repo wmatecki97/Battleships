@@ -1,9 +1,18 @@
-﻿using Battleships.Console.Ui;
+﻿using Battleships.Console.Interfaces;
+using Battleships.Console.Ui;
 using Battleships.Core;
+using Battleships.Core.Interfaces;
 using Battleships.Core.Models.Boards;
+using Microsoft.Extensions.DependencyInjection;
 
-var board = new DefaultBoard(new RandomNumberGenerator());
-var game = new Game(board);
+var serviceProvider = new ServiceCollection()
+    .AddSingleton<IRandomNumberGenerator, RandomNumberGenerator>()
+    .AddSingleton<IBoard, DefaultBoard>()
+    .AddSingleton<IGame, Game>()
+    .AddSingleton<IMessenger, ConsoleMessenger>()
+    .AddSingleton<IInputTranslator, InputTranslator>()
+    .AddSingleton<TextUi>()
+    .BuildServiceProvider();
 
-var uI = new TextUi(game, new ConsoleMessenger(), new InputTranslator());
-uI.Run();
+var uI = serviceProvider.GetService<TextUi>();
+uI!.Run();

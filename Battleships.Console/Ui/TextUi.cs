@@ -4,14 +4,14 @@ using Battleships.Core.Models;
 
 namespace Battleships.Console.Ui;
 
-internal sealed class TextUi
+public sealed class TextUi
 {
     private readonly IGame _game;
     private readonly IInputTranslator _inputTranslator;
     private readonly IMessenger _messenger;
     private bool _isRunning = true;
 
-    internal TextUi(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
+    public TextUi(IGame game, IMessenger messenger, IInputTranslator inputTranslator)
     {
         _game = game;
         _messenger = messenger;
@@ -29,7 +29,7 @@ internal sealed class TextUi
 
     internal void ProcessNextRound()
     {
-        var input = _messenger.GetInput();
+        string input = _messenger.GetInput();
         if (_inputTranslator.TryGetCoordinatesFromInput(input, out var coordinates))
         {
             var shootStatus = _game.Shoot(coordinates.X, coordinates.Y);
