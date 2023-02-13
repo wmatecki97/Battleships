@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Core.Models;
 
-public class Placement
+public class ShipCoordinate
 {
     public int X1 { get; set; }
     public int Y1 { get; set; }

@@ -5,7 +5,7 @@ using Battleships.Core.Models.Ships;
 namespace Battleships.Core.Models.Boards;
 
 /// <summary>
-/// Default Board of DefaultSize 10x10 that contains Battleship and two Destroyers
+///     Default Board of DefaultSize 10x10 that contains Battleship and two Destroyers
 /// </summary>
 public class DefaultBoard : RandomShipPlacementBoard
 {
@@ -16,7 +16,8 @@ public class DefaultBoard : RandomShipPlacementBoard
         new Destroyer()
     };
 
-    public DefaultBoard(IRandomNumberGenerator randomNumberGenerator) : base(DefaultShips, DefaultSize, randomNumberGenerator)
+    public DefaultBoard(IRandomNumberGenerator randomNumberGenerator) : base(DefaultShips, DefaultSize,
+        randomNumberGenerator)
     {
     }
 

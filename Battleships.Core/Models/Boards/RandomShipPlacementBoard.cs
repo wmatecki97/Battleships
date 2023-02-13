@@ -5,7 +5,7 @@ using Battleships.Core.Interfaces;
 namespace Battleships.Core.Models.Boards;
 
 /// <summary>
-/// Board that places the given ships in the random places by default
+///     Board that places the given ships in the random places by default
 /// </summary>
 public class RandomShipPlacementBoard : BoardBase
 {
@@ -23,19 +23,19 @@ public class RandomShipPlacementBoard : BoardBase
 
     private void PlaceShipOnBoardRandomly(IShip ship)
     {
-        var possiblePlacements = GetAllPossiblePlacementsOfShip(ship);
+        var possibleShipCoordinates = GetAllPossibleShipCoordinates(ship);
 
-        if (possiblePlacements.Count == 0)
+        if (possibleShipCoordinates.Count == 0)
         {
             throw new NotEnoughPlaceOnTheBoardException();
         }
 
-        var randomPlacementId = _randomNumberGenerator.GetRandomNumber(0, possiblePlacements.Count);
-        var selectedPlacement = possiblePlacements[randomPlacementId];
+        int randomShipCoordinateIndex = _randomNumberGenerator.GetRandomNumber(0, possibleShipCoordinates.Count);
+        var shipCoordinate = possibleShipCoordinates[randomShipCoordinateIndex];
 
-        for (int x = selectedPlacement.X1; x <= selectedPlacement.X2; x++)
+        for (int x = shipCoordinate.X1; x <= shipCoordinate.X2; x++)
         {
-            for (int y = selectedPlacement.Y1; y <= selectedPlacement.Y2; y++)
+            for (int y = shipCoordinate.Y1; y <= shipCoordinate.Y2; y++)
             {
                 var field = GetField(x, y);
                 field.Ship = ship;
@@ -44,7 +44,7 @@ public class RandomShipPlacementBoard : BoardBase
         }
     }
 
-    private List<ShipCoordinate> GetAllPossiblePlacementsOfShip(IShip ship)
+    private List<ShipCoordinate> GetAllPossibleShipCoordinates(IShip ship)
     {
         var possiblePlacements = new List<ShipCoordinate>();
         for (int x = 0; x < Size; x++)
